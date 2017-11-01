@@ -1,15 +1,15 @@
-#Assignment API
+# Assignment API
 
 ----------
 
-###Require
+### Require
 
  - NodeJS - [https://nodejs.org/en/](https://nodejs.org/en/)
  - MySQL database - [http://wampserver.com/](http://www.wampserver.com/) (exemple)
  - Postman - [https://www.getpostman.com/](https://www.getpostman.com/) (optional)
  
  
-###Steps
+### Steps
 
  1. Clone project
  2. Configure database in *dbconnection.js* file and load the table exemple *task.sql*
