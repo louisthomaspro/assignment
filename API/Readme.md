@@ -35,6 +35,7 @@
 		console.log(response);
 	});
 	```
+	Now open *token.html* and get your token...
 	
 
 ### Sources
