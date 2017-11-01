@@ -1,3 +1,5 @@
+
+
 # Assignment API
 
 
@@ -12,8 +14,28 @@
 
  1. Clone project
  2. Configure database in *dbconnection.js* file and load the table exemple *task.sql*
- 4. Open console in your project folder
-	Type >`npm install` to install **dependencies** and then >`node app` to **start** the app at [http://localhost:8080/](http://localhost:8080/)
- 4. In the Postman header, don't forget the Auth0 token
-	`authorization: 'Bearer {{token}}'`
+ 3. Open console in your project folder. Type >`npm install` to install **dependencies** and then >`node app` to **start** the app at [http://localhost:8080/](http://localhost:8080/)
+ 4. In the Postman header, don't forget the Auth0 token `authorization: 'Bearer {{token}}'`. To get the token, create *tokenclient.js* file in root folder with this inside :
 
+```javascript
+var settings = {
+	"async": true,
+	"crossDomain": true,
+	"url": "https://ltpro.eu.auth0.com/oauth/token",
+	"method": "POST",
+	"headers": {
+	"content-type": "application/json"
+},
+	"data": "{\"client_id\":\"****\",\"client_secret\":\"****\",\"audience\":\"https://easy-assignment.com\",\"grant_type\":\"client_credentials\"}"
+}
+
+$.ajax(settings).done(function (response) {
+	console.log(response);
+});
+```
+
+### Sources
+
+ - Secure backend API - [https://scotch.io/tutorials/building-and-securing-a-modern-backend-api](https://scotch.io/tutorials/building-and-securing-a-modern-backend-api)
+ - Angular + API - [https://medium.com/craft-academy/connecting-an-api-to-an-angular-4-front-end-application-e0fc9ea33202](https://medium.com/craft-academy/connecting-an-api-to-an-angular-4-front-end-application-e0fc9ea33202)
+ - Angular - [https://angular.io/docs](https://angular.io/docs)
