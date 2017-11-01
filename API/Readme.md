@@ -1,6 +1,5 @@
 # Assignment API
 
-----------
 
 ### Require
 
