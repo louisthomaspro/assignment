@@ -21,17 +21,17 @@ var app = express();
 
 
 var jwtCheck = jwt({
-    /*secret: jwks.expressJwtSecret({
+    secret: jwks.expressJwtSecret({
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 5,
         jwksUri: "https://ltpro.eu.auth0.com/.well-known/jwks.json"
-    }),*/
-	secret: rsaValidation(),
-    audience: 'https://api.assigment.com/',
+    }),
+    audience: 'https://easy-assignment.com',
     issuer: "https://ltpro.eu.auth0.com/",
     algorithms: ['RS256']
 });
+
 
 app.use(jwtCheck);
 
