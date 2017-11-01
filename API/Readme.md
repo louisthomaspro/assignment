@@ -12,27 +12,30 @@
  
 ### Steps
 
- 1. Clone project
- 2. Configure database in *dbconnection.js* file and load the table exemple *task.sql*
- 3. Open console in your project folder. Type >`npm install` to install **dependencies** and then >`node app` to **start** the app at [http://localhost:8080/](http://localhost:8080/)
- 4. In the Postman header, don't forget the Auth0 token `authorization: 'Bearer {{token}}'`. To get the token, create *tokenclient.js* file in root folder with this inside :
+1. Clone project
 
-```javascript
-var settings = {
-	"async": true,
-	"crossDomain": true,
-	"url": "https://ltpro.eu.auth0.com/oauth/token",
-	"method": "POST",
-	"headers": {
-	"content-type": "application/json"
-},
-	"data": "{\"client_id\":\"****\",\"client_secret\":\"****\",\"audience\":\"https://easy-assignment.com\",\"grant_type\":\"client_credentials\"}"
-}
+2. Configure database in *dbconnection.js* file and load the table exemple *task.sql*
 
-$.ajax(settings).done(function (response) {
-	console.log(response);
-});
-```
+3. Open console in your project folder. Type >`npm install` to install **dependencies** and then >`node app` to **start** the app at [http://localhost:8080/](http://localhost:8080/)
+
+4. In the Postman header, don't forget the Auth0 token `authorization: 'Bearer {{token}}'`. To get the token, create *tokenclient.js* file in root folder and copy/paste your client information on [https://auth0.com/](https://auth0.com/) > API > assignment API > Test > Select language <kbd>jQuery</kbd>. The file should be like :
+	```javascript
+	var settings = {
+		"async": true,
+		"crossDomain": true,
+		"url": "****",
+		"method": "POST",
+		"headers": {
+		"content-type": "application/json"
+	},
+		"data": "{\"client_id\":\"****\",\"client_secret\":\"****\",\"audience\":\"https://easy-assignment.com\",\"grant_type\":\"client_credentials\"}"
+	}
+
+	$.ajax(settings).done(function (response) {
+		console.log(response);
+	});
+	```
+	
 
 ### Sources
 
