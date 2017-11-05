@@ -1,0 +1,87 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage[french]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{stmaryrd}
+
+\title{Modèle mathématique pour l'affectation de projets}
+\date{19 octobre 2017}
+\author{
+LOCHE Jérémy\\ Département Informatique industrielle 3A, Polytech Tours
+\and
+THOMAS Louis\\ Département Informatique industrielle 3A, Polytech Tours}
+
+
+
+\begin{document}
+\maketitle
+
+\newpage
+
+\section{Le problème en français}
+On dispose d'une liste d'étudiants et d'une liste de projets. On suppose qu'il y a au moins autant de projets que d'étudiants ou de groupes minimum d'étudiants attribuable à un projet. Chaque étudiant confectionne une liste de projets ordonnée par ordre décroissant de préférence sur lequel il souhaite travailler.\' A chaque projet ne peuvent être affecté qu'un nombre précis d'étudiants. Un étudiant ne peut être affecté qu'à un et un seul projet.
+
+
+\section{L'interprétation mathématique}
+
+Il faut traduire tout ça dans un modèle mathématique. Nous choisissons de représenter les étudiants par un graphe bipartie dans lequel $n$ noeuds "étudiants"  et $m$ noeuds "projets"   sont relié par des arcs pondéré par un nombre entier allant de 1 à "nombre~de~projets".
+
+On noter par la suite:
+$$
+i \in \llbracket 1,n \rrbracket 
+\\
+\text{ }
+i \Rightarrow \text{etudiant}
+$$
+
+$$
+j \in \llbracket 1,m \rrbracket 
+\\
+\text{ }
+j \Rightarrow \text{projet}
+$$
+
+$$
+A=
+\left(
+\begin{array}{c c c c}
+a_{11} & ...        & a_{1m} \\ 
+...        & a_{ij}   & ... \\
+a_{n1} & ...       & a_{nm} \\
+\end{array}
+\right)
+\Rightarrow \text{Matrice des voeux}
+$$
+
+$$
+X=
+\left(
+\begin{array}{c c c c}
+x_{11} & ...        & x_{1m} \\ 
+...        & x_{ij}   & ... \\
+x_{n1} & ...       & x_{nm} \\
+\end{array}
+\right)
+\Rightarrow \text{Matrice d'affectation aux projets}
+$$
+
+$$
+a_{ij} \in  \llbracket 1,m \rrbracket \Rightarrow \text{voeux de l'étudiant i pour le projet j avec m le choix préféré et 1 le pire}
+$$
+
+$$
+x_{ij} \in  \lbrace 1,m \rbrace
+\Rightarrow
+x_{ij}=
+\left\lbrace
+\begin{array}{l}
+1 \text{ : le projet j est affecté à l'étudiant i} \\
+0 \text{ : sinon}
+\end{array}
+\right.
+$$
+
+
+\end{document}
