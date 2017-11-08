@@ -8,3 +8,4 @@
 - http://winglpk.sourceforge.net/
 - Executer un modele .mod avec des datas dans un .dat au format AMPL
 - glpsol -m fichierModele.mod -d fichierDonnee.dat
+- how to edit markdown: https://stakedit.io/app
