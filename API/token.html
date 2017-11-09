@@ -24,28 +24,19 @@
 				</tr>
 			</tbody>
 		</table>
-		
 		<script src="tokenclient.js"></script>
 		<script>
-		
 			$(function () {
 				$('[data-toggle="tooltip"]').tooltip()
-			})
-			// Tooltip
-
+			});
 			
-
-			// Clipboard
-			var clipboard = new Clipboard('button');
-
+			var clipboard = new Clipboard('#btn-copy');
 			clipboard.on('success', function(e) {
 			  console.log('Copied!');
 			});
-
 			clipboard.on('error', function(e) {
 			  console.log('Failed!');
 			});
-		
 
 			$.ajax(settings).done(function (response) {
 				var res = response.token_type + " " + response.access_token;

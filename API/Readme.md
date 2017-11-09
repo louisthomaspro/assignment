@@ -1,5 +1,4 @@
 
-
 # Assignment API
 
 
@@ -23,19 +22,19 @@
 	var settings = {
 		"async": true,
 		"crossDomain": true,
-		"url": "****",
+		"url": "***",
 		"method": "POST",
 		"headers": {
 		"content-type": "application/json"
 	},
-		"data": "{\"client_id\":\"****\",\"client_secret\":\"****\",\"audience\":\"https://easy-assignment.com\",\"grant_type\":\"client_credentials\"}"
+		"data": "{\"client_id\":\"***\",\"client_secret\":\"***\",\"audience\":\"***",\"grant_type\":\"client_credentials\"}"
 	}
 
 	$.ajax(settings).done(function (response) {
 		console.log(response);
 	});
 	```
-	Now open *token.html* and get your token...
+	Now open *token.html* and get your token... (allow **Access-Control-Allow-Origin** to get the token)
 	
 
 ### Sources
