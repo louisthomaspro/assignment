@@ -54,7 +54,8 @@ s.t. howManyStudentsPerProjects{j in J}: sum{i in I} affectation[i,j] <= maxStud
 s.t. minPreference{i in I}: sum{j in J} affectation[i,j]*preference[i,j] >= minPreferenceValue;
 
 maximize obj: minPreferenceValue + sum{i in I, j in J} preference[i,j] * affectation[i,j];
-/* the objective is to find a cheapest assignment */
+#maximize obj:  sum{i in I, j in J} preference[i,j] * affectation[i,j];
+/* the objective is to find a best solution in term of mean preference and justice*/
 
 solve;
 
@@ -83,7 +84,7 @@ param ProjectsPerStudents := 1;
 param preference : 1 2 3 4 5 :=
 		   1   1 5 3 2 4 
 		   2   1 2 3 5 4
-		   3   5 2 3 1 4 
+		   3   1 2 3 1 4 
 		   4   3 4 2 1 5 
 		   5   2 3 1 4 5 
 		   6   3 5 4 2 1 
