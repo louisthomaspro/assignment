@@ -9,12 +9,14 @@ const jwt = require('express-jwt');
 const jwks = require('jwks-rsa');
 var rsaValidation = require('auth0-api-jwt-rsa-validation');
 
-var cors=require('cors');
+var cors = require('cors');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
 var tasks = require('./routes/tasks');
 var solver = require('./routes/solver');
+
+var email = require('./routes/email');
 
 var app = express();
 
@@ -27,9 +29,9 @@ var jwtCheck = jwt({
         jwksRequestsPerMinute: 5,
         jwksUri: "https://ltpro.eu.auth0.com/.well-known/jwks.json"
     }),
-    audience: 'https://easy-assignment.com',
-    issuer: "https://ltpro.eu.auth0.com/",
-    algorithms: ['RS256']
+    audience: 'https://api-assignment.com',
+    issuer: "https://ltpro.eu.auth0.com/"
+    algorithms: ['HS256']
 });
 
 
@@ -59,6 +61,7 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/tasks', tasks);
 app.use('/solver', solver);
+app.use('/email', email);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

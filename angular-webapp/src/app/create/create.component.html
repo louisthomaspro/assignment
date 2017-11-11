@@ -1,3 +1,10 @@
-<p>
-  create works!
-</p>
+<div class="container">
+
+  <form #form="ngForm" (ngSubmit)="getThing()">
+    <mat-form-field>
+      <input matInput type="email" [(ngModel)]='emailInput' name="emailInput" placeholder="Your email" email required>
+    </mat-form-field>
+    and <button [disabled]="!form.valid" type="submit" mat-raised-button color="accent">CREATE</button> NOW !
+  </form>
+
+</div>
