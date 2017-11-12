@@ -7,8 +7,8 @@
  - NodeJS - [https://nodejs.org/en/](https://nodejs.org/en/)
  - MySQL database - [http://wampserver.com/](http://www.wampserver.com/) (exemple)
  - Postman - [https://www.getpostman.com/](https://www.getpostman.com/) (optional)
- 
- 
+
+
 ### Steps
 
 1. Clone project
@@ -35,7 +35,12 @@
 	});
 	```
 	Now open *token.html* and get your token... (allow **Access-Control-Allow-Origin** to get the token)
-	
+
+
+### API
+
+create list : post(/list/create) +mail(exemple@gmail.com) +url(localhost/list/list_hash/user_hash)
+
 
 ### Sources
 

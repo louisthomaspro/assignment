@@ -16,7 +16,7 @@ var users = require('./routes/users');
 var tasks = require('./routes/tasks');
 var solver = require('./routes/solver');
 
-var email = require('./routes/email');
+var list = require('./routes/list');
 
 var app = express();
 
@@ -29,9 +29,9 @@ var jwtCheck = jwt({
         jwksRequestsPerMinute: 5,
         jwksUri: "https://ltpro.eu.auth0.com/.well-known/jwks.json"
     }),
-    audience: 'https://api-assignment.com',
-    issuer: "https://ltpro.eu.auth0.com/"
-    algorithms: ['HS256']
+    audience: 'https://easy-assignment.com',
+    issuer: "https://ltpro.eu.auth0.com/",
+    algorithms: ['RS256']
 });
 
 
@@ -53,7 +53,7 @@ app.set('view engine', 'jade');
 app.use(cors());
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -61,7 +61,7 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/tasks', tasks);
 app.use('/solver', solver);
-app.use('/email', email);
+app.use('/list', list);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

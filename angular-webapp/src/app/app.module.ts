@@ -1,13 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
-import { HttpModule } from '@angular/http';
 import { Http, RequestOptions } from '@angular/http';
+import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 
-// auth0
-// import { AuthService } from './auth/auth.service';
-// import { CallbackComponent } from './callback/callback.component';
 import { AuthService } from './auth.service';
 import { AuthHttp, AuthConfig } from 'angular2-jwt';
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
@@ -18,7 +15,10 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
 
 // material design
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations'
-import {MatIconModule, MatToolbarModule, MatButtonModule, MatInputModule} from '@angular/material';
+import {MatIconModule, MatToolbarModule, MatButtonModule, MatInputModule, MatSnackBarModule, MatTabsModule} from '@angular/material';
+// font-awesome
+import { AngularFontAwesomeModule } from 'angular-font-awesome';
+
 // gesture
 import 'hammerjs';
 
@@ -26,12 +26,14 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { CreateComponent } from './create/create.component';
 import { HomeComponent } from './home/home.component';
+import { ListForUserComponent } from './list-for-user/list-for-user.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CreateComponent,
     HomeComponent,
+    ListForUserComponent,
   ],
   imports: [
     BrowserModule,
@@ -40,7 +42,8 @@ import { HomeComponent } from './home/home.component';
     ReactiveFormsModule, FormsModule,
     HttpModule,
     HttpClientModule,
-    MatIconModule, MatToolbarModule, MatButtonModule, MatInputModule
+    AngularFontAwesomeModule,
+    MatIconModule, MatToolbarModule, MatButtonModule, MatInputModule, MatSnackBarModule, MatTabsModule
   ],
   providers: [
     AuthService,

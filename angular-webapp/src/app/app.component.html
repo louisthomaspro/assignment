@@ -1,16 +1,18 @@
-<mat-toolbar>Assigment</mat-toolbar>
-
-
-<button
-  class="btn btn-primary btn-margin"
-  (click)="auth.getAccessToken()">
-    Log In
-</button>
-
-<button
-  class="btn btn-primary btn-margin"
-  (click)="auth.logout()">
-    Log Out
-</button>
+<mat-toolbar>
+  <button mat-button routerLink="/">{{title}}</button>
+  <button mat-button routerLink="/create">Create</button>
+  <span class="fill-remaining-space"></span>
+  <div class="float-right">
+    <button mat-mini-fab>
+      <mat-icon class="fa fa-link" routerLink="/list/1234/5678"></mat-icon>
+    </button>
+    <button mat-mini-fab>
+      <mat-icon class="fa fa-sign-in" (click)="auth.getAccessToken()"></mat-icon>
+    </button>
+    <button mat-mini-fab>
+      <mat-icon class="fa fa-sign-out" (click)="auth.clearToken()"></mat-icon>
+    </button>
+  </div>
+</mat-toolbar>
 
 <router-outlet></router-outlet>
