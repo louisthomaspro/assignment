@@ -42,33 +42,45 @@ var affectation{i in I, j in J}, binary, >= 0;
 /* affectation[i,j] = 1 means projects j is assigned to student i
    note that variables affectation[i,j] are binary, however, there is no need to
    declare them so due to the totally unimodular constraint matrix */
+   
 
 var minPreferenceValue, integer, >=0, <=nbProjects;
+
+var minStudentsPP, integer, >=0 , <= nbProjects;
+/* Faire au mieux pour eviter que quelqu'un soit seul sur un projet*/
    
 s.t. howManyProjectsPerStudents{i in I}: sum{j in J} affectation[i,j] = ProjectsPerStudents;
 /* each student can perform at most one project */
 
-s.t. howManyStudentsPerProjects{j in J}: sum{i in I} affectation[i,j] <= maxStudentsPerProjects;
+s.t. howManyStudentsPerProjectsMax{j in J}: sum{i in I} affectation[i,j] <= maxStudentsPerProjects;
 /* each project must be assigned exactly to one student */
+
+#s.t. howManyStudentsPerProjectsMin{j in J}: sum{i in I} affectation[i,j] >= minStudentsPerProjects;
 
 s.t. minPreference{i in I}: sum{j in J} affectation[i,j]*preference[i,j] >= minPreferenceValue;
 
-maximize obj: minPreferenceValue + sum{i in I, j in J} preference[i,j] * affectation[i,j];
+s.t. howManyStudentsPerProjectsMin{j in J}: sum{i in I} affectation[i,j] >= minStudentsPP;
+
+maximize obj: minPreferenceValue + sum{i in I, j in J} preference[i,j] * affectation[i,j] ;#+ minStudentsPP;
 #maximize obj:  sum{i in I, j in J} preference[i,j] * affectation[i,j];
 /* the objective is to find a best solution in term of mean preference and justice*/
 
 solve;
 
 printf "\n";
-printf "Student\tProject\tPreference\n";
+printf "Student\tProject-Number Students\n";
 printf{i in I} "%7d\t%7d\t%10g\n", i, sum{j in J} j * affectation[i,j],
    sum{j in J} preference[i,j] * affectation[i,j];
 printf "----------------------------\n";
 printf "          Total: %10g\n", sum{i in I, j in J} preference[i,j] * affectation[i,j];
 printf "Min  Preference: %10g\n",minPreferenceValue;
 printf "Total Objective: %10g\n", obj;
+printf "----------------------------\n";
+printf "Project\tNb Students\n";
+printf {j in J} "%7d\t%7d\n" , j, sum{i in I} affectation[i,j];
 printf "\n";
 
+/*
 data;
 
 param nbStudents :=10;
@@ -93,4 +105,5 @@ param preference : 1 2 3 4 5 :=
 		   9   3 4 5 1 2 
 		   10  5 1 2 3 4 ;
 
+		   */
 end;
