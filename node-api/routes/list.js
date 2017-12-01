@@ -7,7 +7,7 @@ var User = require('../models/user.js');
 router.post('/create', function(req, res) {
 	var userMail = req.body.mail;
 	var url = req.body.url;
-
+	console.log(req.body);
 	if (userMail) {
 		// create user
 		User.create({	userMail : req.body.mail }, function(err1,res1) {
@@ -37,7 +37,7 @@ router.post('/create', function(req, res) {
 						return res.json("mail failed...");
 					} else {
 						console.log('Email sent: ' + info.response);
-						return res.json({"a" : info.response, "b" : "Sent !", "c" : req.body});
+						return res.json({"result" : "OK", "mail" : userMail, "url" : url});
 					}
 				});
 

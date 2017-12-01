@@ -1,6 +1,6 @@
-<form #form="ngForm" (ngSubmit)="createList()">
+<form #form="ngForm" (ngSubmit)="createList(form)">
   <mat-form-field>
-    <input matInput type="email" [(ngModel)]='emailInput' name="emailInput" placeholder="Your email" email required>
+    <input matInput type="email" [(ngModel)]='mailInput' name="mailInput" placeholder="Your mail" email required>
   </mat-form-field>
   <button [disabled]="!form.valid" type="submit" mat-raised-button color="accent">CREATE</button>
 </form>

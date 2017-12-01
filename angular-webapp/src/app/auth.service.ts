@@ -36,7 +36,6 @@ export class AuthService  {
           grant_type: AUTH_CONFIG.grant_type,
           audience: AUTH_CONFIG.audience
         }
-
         const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
         this.http

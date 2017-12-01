@@ -39,7 +39,7 @@
 
 ### API
 
-create list : post(/list/create) +mail(exemple@gmail.com) +url(localhost/list/list_hash/user_hash)
+create list : post(/list/create) +mail(exemple@gmail.com) +url(http://localhost:4200/list/list_hash/user_hash)
 
 
 ### Sources
