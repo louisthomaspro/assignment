@@ -2,41 +2,13 @@
 \defcounter {refsection}{0}\relax 
 \select@language {french}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Liste des intervenants}{a}{chapter*.1}
-\defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Avertissement}{b}{chapter*.2}
-\defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Pour citer ce document}{c}{chapter*.3}
-\defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Table des mati\`eres\markboth {Table des mati\`eres}{Table des mati\`eres}}{i}{chapter*.4}
-\defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Liste des tableaux}{ii}{chapter*.5}
-\defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}
+\addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
 \select@language {english}
 \defcounter {refsection}{0}\relax 
 \select@language {french}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {2}Le probl\IeC {\`e}me d'affectation}{2}{chapter.2}
-\defcounter {refsection}{0}\relax 
-\select@language {english}
-\defcounter {refsection}{0}\relax 
-\select@language {french}
-\defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {1}Pr\IeC {\'e}sentation}{2}{section.2.1}
-\defcounter {refsection}{0}\relax 
-\select@language {english}
-\defcounter {refsection}{0}\relax 
-\select@language {french}
-\defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2}La mod\IeC {\'e}lisation math\IeC {\'e}matique}{2}{section.2.2}
-\defcounter {refsection}{0}\relax 
-\select@language {english}
-\defcounter {refsection}{0}\relax 
-\select@language {french}
-\defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.1}Les donn\IeC {\'e}es et les param\IeC {\`e}tres}{2}{subsection.2.2.1}
+\addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
 \select@language {english}
 \defcounter {refsection}{0}\relax 
@@ -50,15 +22,25 @@
 \defcounter {refsection}{0}\relax 
 \select@language {french}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.2}Les variables et les contraintes}{3}{subsection.2.2.2}
+\select@language {english}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.3}Solution simple, maximiser la pr\IeC {\'e}f\IeC {\'e}rence moyenne}{3}{subsection.2.2.3}
+\select@language {french}
 \defcounter {refsection}{0}\relax 
 \select@language {english}
 \defcounter {refsection}{0}\relax 
 \select@language {french}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.4}Solution de compromis, la pr\IeC {\'e}f\IeC {\'e}rence minimale}{3}{subsection.2.2.4}
+\contentsline {chapter}{\numberline {2}Le probl\IeC {\`e}me d'affectation}{}{chapter.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {1}{\ignorespaces Indi\IeC {\c c}age des entit\IeC {\'e}s du mod\IeC {\`e}le math\IeC {\'e}matique\relax }}{3}{table.2.1}
+\defcounter {refsection}{0}\relax 
+\select@language {english}
+\defcounter {refsection}{0}\relax 
+\select@language {french}
+\defcounter {refsection}{0}\relax 
+\select@language {english}
+\defcounter {refsection}{0}\relax 
+\select@language {french}
 \defcounter {refsection}{0}\relax 
 \select@language {english}
 \defcounter {refsection}{0}\relax 

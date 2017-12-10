@@ -1,4 +1,5 @@
 \documentclass{polytech/polytech}
+\usepackage{amsmath}
 % zone du préambule
 
 \typereport{custom}
@@ -40,5 +41,105 @@
 
 \begin{document}
 % zone du contenu du document
-Introduction
+
+%=========BEGIN chap 0=============
+\chapter{Introduction}
+\label{chap:intro}
+
+%=========BEGIN chap 1=============
+\chapter{Le problème d'affectation}
+\label{chap:pb_affectation}
+
+\section{Présentation}
+\label{sec:pres_affectation}
+
+Ce travail est un problème d'affectation.
+En effet, le but est d'associer à un ou plusieurs individus un projet précis en respectant un objectif simple: maximiser la satisfaction générale de l'affectation.
+L'idée et que chacun soit satisfait du projet auquel il a été affecté et qu'il soit en mesure de le mener à bien dans les meilleures conditions.
+
+
+\section{La modélisation mathématique}
+\label{sec:mod_math}
+
+Pour résoudre ce problème, nous allons avoir besoin de la formaliser de manière mathématique afin d'essayer de trouver des solutions.
+Nous rappelons que le but est d'affecter un étudiant, un binôme ou un groupe de personnes à un projet.
+
+\subsection{Les données et les paramètres}
+\label{sec:donnees_params}
+Pour cela, il faut créer deux entités appartenant à deux ensembles qui seront nos données de départ:
+\begin{enumerate}
+\item une entité $individu \in Individus$ : représente une personne, un binôme ou un groupe de personnes qui accomplira un \textbf{projet};
+\item une entité  $projet \in Projets$ : représente un projet auquel sera affecté un \textbf{individu}.
+\end{enumerate}
+
+Pour plus de simplicité, on va indicer les entités comme dans le tableau \ref{tab:indice_entite_mod_math}. On a choisi que les binômes seront représentés par des individus.
+\begin{table}
+\caption{Indiçage des entités du modèle mathématique}
+\label{tab:indice_entite_mod_math}
+\begin{tabular}{|c|c|c|c|}
+\hline 
+\multicolumn{2}{|c|}{$\forall individu \in Individus$} & \multicolumn{2}{|c|}{$\forall projet \in Projets$} \\ 
+\hline 
+\textbf{Indice Individu} & Nom individu &\textbf{ Indice Projet} & Nom projet \\ 
+\hline 
+\textbf{1} & Binôme: Arthur, Léo & \textbf{1} & Projet: Lampe connecté \\ 
+\hline 
+\textbf{2} & Binôme: Sophie, Jean & \textbf{2} & Projet: Moniteur UVA \\ 
+\hline 
+... & ... & ... & ... \\ 
+\hline 
+\textbf{nbIndividus} & Binôme: Paul, Pierre &\textbf{ nbProjets} & Projet: Voiture RC \\ 
+\hline 
+\end{tabular} 
+\end{table}
+
+Pour que l'affectation de chaque individu à un projet, il faut assez de projet pour tout le monde ce qui implique la relation suivante:
+$$ nbProjets \geqslant nbIndividus$$
+
+Pour tout les individus, on souhaite connaître sa préférence pour un projet afin de procéder à l'affectation. En utilisant le formalisme mathématique, on peut définir la quantité $preference$ qui définira l'appréciation d'un individu à un projet donné:
+$$
+\forall (i,p) \in Individus \times Projets, 
+preference[i,p] \in [1, nbProjets]
+$$
+On choisit de dire que cette préférence va de $nbProjet$ à 1 dans l'ordre décroissant d'appréciation. Ainsi, un individu qui aurait la préférence $nbProjets$ pour un projet indiquera que ce projet est son préféré et 1 pour celui qui lui plait le moins.
+
+Pour que l'affectation soit équitable, un individu ne peut pas donner la même préférence à deux projets différents. De manière mathématique cela donne:
+$$
+\forall (i,p1,p2) \in Individus \times Projets^2 , p1 \neq p2 \Rightarrow preference[i,p1] \neq preference[i,p2]
+$$
+
+Lorsque ces pré-conditions sont respectés, alors on crée un \textbf{paramètre} appelé préférence utile pour résoudre le problème d'affectation.
+$$
+\forall (i,p) \in Individus \times Projets, 
+preference[i,p]
+$$
+
+Nous allons maintenant voir quels contraintes et variables sont à déterminer pour résoudre le problème.
+
+\subsection{Les variables et les contraintes}
+
+Pour modéliser entièrement le problème d'affectation, la préférence de chaque individus pour un projet n'est pas suffisante. 
+Nous allons devoir mettre en place des \textbf{ variables} et des \textbf{contraintes} qu'elles doivent respecter.
+
+Une \textbf{variable} est une valeur qui doit être déterminée pour résoudre le problème.
+
+Nous cherchons à déterminer a quel projet est affecté un individu. Pour cela on crée la variable $affectation$:
+$$
+\forall (i,p) \in Individu\times Projets , affectation[i,p]=
+\left\lbrace
+\begin{array}{l}
+1 \text{ si l'individu i est affecté au projet p} \\
+0 \text{ sinon}
+\end{array} 
+\right.
+$$
+	
+\subsection{Solution simple, maximiser la préférence moyenne}
+\label{sec:max_pref_moy}
+
+
+\subsection{Solution de compromis, la préférence minimale}
+\label{sec:pref_min}
+%=========END chap 1================
+
 \end{document}
