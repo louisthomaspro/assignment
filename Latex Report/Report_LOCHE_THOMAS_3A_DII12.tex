@@ -2,6 +2,8 @@
 \usepackage{amsmath}
 % zone du préambule
 
+
+
 \typereport{custom}
 \typereportname{Rapport de projet développement DII3}
 
@@ -39,11 +41,13 @@
 
 \addbibresource{biblio}
 
+\SetKw{Break}{break}
+
 \begin{document}
 % zone du contenu du document
 
 %=========BEGIN chap 0=============
-\chapter{Introduction}
+\chapter*{Introduction}
 \label{chap:intro}
 
 %=========BEGIN chap 1=============
@@ -64,9 +68,14 @@ L'idée et que chacun soit satisfait du projet auquel il a été affecté et qu'
 Pour résoudre ce problème, nous allons avoir besoin de la formaliser de manière mathématique afin d'essayer de trouver des solutions.
 Nous rappelons que le but est d'affecter un étudiant, un binôme ou un groupe de personnes à un projet.
 
+Le fait de formaliser un problème en langage mathématique nous permettra de demander à un \textbf{solver} de trouver la solution à notre problème.
+
+Pour cela, il faut définir quels sont les \textbf{paramètres}\footnote{Dans un modèle mathématique, un paramètre est une donnée.}, les \textbf{ variables}\footnote{Dans un modèle mathématique, une variable est une valeur calculée, une inconnue.}, les \textbf{contraintes}\footnote{Les contraintes représentent les règles à respecter lors de la résolution du problème.}, et la \textbf{fonction objectif}\footnote{C'est l'ultime but à atteindre pour établir que la solution au problème est optimale.} de notre problème.
+
+Commençons par définir nos données c'est à dire les paramètres de notre modèle.
 \subsection{Les données et les paramètres}
 \label{sec:donnees_params}
-Pour cela, il faut créer deux entités appartenant à deux ensembles qui seront nos données de départ:
+Pour cela on commence par créer deux entités appartenant à deux ensembles qui seront nos données de départ:
 \begin{enumerate}
 \item une entité $individu \in Individus$ : représente une personne, un binôme ou un groupe de personnes qui accomplira un \textbf{projet};
 \item une entité  $projet \in Projets$ : représente un projet auquel sera affecté un \textbf{individu}.
@@ -99,7 +108,7 @@ $$ nbProjets \geqslant nbIndividus$$
 Pour tout les individus, on souhaite connaître sa préférence pour un projet afin de procéder à l'affectation. En utilisant le formalisme mathématique, on peut définir la quantité $preference$ qui définira l'appréciation d'un individu à un projet donné:
 $$
 \forall (i,p) \in Individus \times Projets, 
-preference[i,p] \in [1, nbProjets]
+preference[i,p] \in \llbracket 1, nbProjets \rrbracket
 $$
 On choisit de dire que cette préférence va de $nbProjet$ à 1 dans l'ordre décroissant d'appréciation. Ainsi, un individu qui aurait la préférence $nbProjets$ pour un projet indiquera que ce projet est son préféré et 1 pour celui qui lui plait le moins.
 
@@ -121,7 +130,7 @@ Nous allons maintenant voir quels contraintes et variables sont à déterminer p
 Pour modéliser entièrement le problème d'affectation, la préférence de chaque individus pour un projet n'est pas suffisante. 
 Nous allons devoir mettre en place des \textbf{ variables} et des \textbf{contraintes} qu'elles doivent respecter.
 
-Une \textbf{variable} est une valeur qui doit être déterminée pour résoudre le problème.
+Une \textbf{variable} est une valeur qui doit être déterminée pour résoudre le problème. Il faut donc la calculer.
 
 Nous cherchons à déterminer a quel projet est affecté un individu. Pour cela on crée la variable $affectation$:
 $$
@@ -133,13 +142,182 @@ $$
 \end{array} 
 \right.
 $$
-	
-\subsection{Solution simple, maximiser la préférence moyenne}
+
+On connait la quantité que l'on souhaite déterminer pour résoudre le problème d'affectation, cependant, il faut définir des \textbf{contraintes} qui vont définir les règles de l'affectation.
+
+Nous allons énoncer et définir deux contraintes utiles à la résolution du problème. La première est le nombre de projets par individus et la seconde est le nombre d'individus par projets. 
+Pour une affectation d'un individu pour un projet, alors on a les contraintes \eqref{eqn:nb_proj_indiv} et \eqref{eqn:nb_indiv_proj}.
+
+\begin{equation}
+\label{eqn:nb_proj_indiv}
+\forall i \in Individus, nbProjetsParIndividu= \sum_{p \in Projets} affectation[i,p] = 1
+\end{equation}
+
+Pour notre problème, un individu doit être affecté à un seul projet, ce qui donne la contrainte \eqref{eqn:nb_proj_indiv}. 
+
+\begin{equation}
+\label{eqn:nb_indiv_proj}
+\forall p \in Projets, nbIndividusParProjet= \sum_{i \in Individus} affectation[i,p] \leqslant 1
+\end{equation}
+
+La contrainte \eqref{eqn:nb_indiv_proj} dit qu'un projet ne peut être réalisé que par au plus un individu.
+
+Nous avons définit nos paramètres, variables et contraintes, donc il ne reste plus qu'à définir l'objectif à atteindre avec tout ça. 
+\subsection{Objectif simple, maximiser la préférence moyenne}
 \label{sec:max_pref_moy}
 
+Pour choisir quelle configuration de variable on va garder, c'est à dire quel choix d'affectation on va faire, on va devoir mettre en place un indicateur permettant de juger de la qualité de l'affectation. 
+On appelle cet indicateur la \textbf{fonction objectif}.
+Trouver la solution à un problème mathématique se résume souvent à établir la bonne fonction objectif qu'on souhaite faire converger vers une valeur donner, maximiser ou minimiser.
 
-\subsection{Solution de compromis, la préférence minimale}
+
+Dans notre cas, on souhaite maximiser la satisfaction générale, c'est à dire maximiser la somme des préférence des projets affectés à chacun. Ainsi le résultat optimal sera atteint lorsqu'on aura réussi a trouver la combinaison de variable qui donne la plus grande valeur de la \textbf{fonction objectif}. 
+
+\begin{equation}
+\label{eqn:maximize_preference}
+\text{maximiser} \left( \sum_{(i \in Individus)} \sum_{(p\in Projets)} affectation[i,p]\times preference[i,p] \right)
+\end{equation}
+
+Pour le problème d'affectation maximiser la fonction objectif \eqref{eqn:maximize_preference} donnera la satisfaction générale la plus élevée car elle correspondra à trouver faire en sorte que si un individu est affecté à un projet, la valeur de la préférence sera en moyenne la plus grande.
+
+Cette méthode fonctionne est efficace pour trouver la meilleur préférence moyenne, cependant, elle peut être injuste et sélectionner pour la majorité des individu la préférence maximale et pour un individu la pire des préférence.
+
+Il peut donc apparaître un sentiment d'injustice derrière cette affectation avec la sensation que quelqu'un à été mis de coté pour satisfaire le bien commun.
+
+A cela, nous proposons un solution de compromis qui fourni une solution plus homogène (si elle existe évidemment).
+
+\subsection{Objectif de compromis, la contrainte de la préférence minimale}
 \label{sec:pref_min}
+
+Pour obtenir une affectation plus homogène, on introduit une contrainte au modèle: c'est la contrainte de la préférence minimale.
+Le but est d'assurer que lorsqu'un individu est affecté à un projet, la préférence soit supérieure ou égale à une valeur de seuil $ValeurPrefMin$.
+On peut donc assurer avec cette contrainte que la préférence n'atteindra jamais 1 ou 2 etc...
+
+On pose donc un nouveau \textbf{paramètre}:
+$$
+ValeurPrefMin \in \llbracket 1,nbProjet \rrbracket
+$$
+
+Et une nouvelle \textbf{contrainte}, qui impose que l'affectation soit faite avec un préférence supérieure à $ValeurPrefMin$ :
+$$
+\forall i \in Individus ,preferenceMinimale = \sum_{p \in Projets} affectation[i,p]\times preference[i,p] \geqslant ValeurPrefMin
+$$
+
+\paragraph{Problème} Cette contrainte est très restrictive sur les solutions. Il se peut même $ValeurPrefMin$ de manière trop audacieuse et que le problème soit insoluble avec ces paramètres.
+Prenons un exemple de l'affectation de 4 individus et 4 projets (Cf. tableau:\ref{tab:preference_exemple}).
+
+\begin{table}
+\caption{Données de préférence pour l'exemple}
+\label{tab:preference_exemple}
+\begin{tabular}{|c|c|c|c|c|}
+\hline 
+préférence[individu,projet] & Projet 1 & Projet 2 & Projet 3 & Projet 4 \\ 
+\hline 
+Individu 1 & 4 & 3 & 2 & 1 \\ 
+\hline 
+Individu 2 & 4 & 3 & 1 & 2 \\ 
+\hline 
+Individu 3 & 3 & 4 & 2 & 1 \\ 
+\hline 
+Individu 4 & 2 & 4 & 1 & 3 \\ 
+\hline 
+\end{tabular} 
+\end{table}
+
+Si on choisi $ValeurPrefMin=3$, alors le modèle mathématique est insoluble car la contrainte $preferenceMinimale$ ne pourras pas être respectée pour tout les individus. On a 4 projets pour 4 individus, on remarque qu'il faudra donc exactement 1 projet par individu pour respecter la contrainte $nbProjetsParIndividu=1$. Le problème est que si un individu est affecté au projet P3, alors la valeur de la préférence est inférieure ou égale à 2 donc inférieure à $ValeurPrefMin=3$. On ne respecte alors pas la contrainte $preferenceMinimale$ pour un des individu donc le modèle est insoluble.
+Pour trouver une solution il faudra revoir le paramètre $ValeurPrefMin$ à la baisse. Pour la valeur 2, on commencera a trouver des solutions pour laquelle la $ValeurPrefMin$ est maximale. Donc les bonnes solutions de compromis.
+
+Il y a plusieurs solutions pour automatiser la détermination de la valeur de $ValeurPrefMin$ pour laquelle on assure que tout le monde aura la meilleur préférence possible tout en maximisant la satisfaction générale.
+
+\paragraph{Solution 1}
+Le but est d'essayer de trouver la valeur maximale de $ValeurPrefMin$ pour laquelle on arrive a résoudre le modèle. Pour cela, on peut rechercher la valeur maximale en faisant plusieurs résolutions du modèle mathématique en fixant différentes valeurs de $ValeurPrefMin$. On peut faire une recherche par tentative ou dichotomique. $ValeurPrefMin$ n'intervient pas dans la fonction objectif à ce stade.
+
+\subparagraph{Recherche de $ValeurPrefMin$ par tentative}
+
+La fonction $SolveModel(\text{param:} ValeurPrefMin)$ est un sous-algorithme appelé par notre algorithme pour effectuer la résolution du modèle mathématique avec la valeur de préférence minimale passée en paramètre.
+Elle renvoie une structure $ResultSolver$ contenant les résultats de la résolution $ResultSolver.data$ et l'état de la résolution $ResultSolver.state$ qui peut valoir soit $Success$ si une solution au modèle a été trouvée et $Fail$ sinon.
+
+On l'utilise donc pour savoir si on a réussi a résoudre le 
+\begin{algorithm}
+\caption{Résolution du modèle avec $ValeurPrefMin$ choisi par tentative} 
+\label{chap:problem_affectation:algo:recherche_tatonnement}
+\tcc{Init variable résultat du solver, contient $ResultSolver.data$ et $ResultSolver.state$}
+$ResultSolver \gets Null$ \\
+
+\tcc{Commencer par la valeur la plus restrictive jusqu'à la moins restrictive}
+\For{$ValeurPrefMin=nbProjets$ \KwTo $1$}
+{
+
+	\tcc{Effectuer une résolution avec la valeur de préférence minimale}
+	$ResultSolver \gets SolveModel(ValeurPrefMin)$ \\
+	
+	
+	
+	\If{$ResultSolver.state= Success$}
+	{
+		\tcc{Le solver a trouvé une solution}
+		\tcc{on a trouvé le maximum pour $ValeurPrefMin$}
+		\tcc{on arrête la boucle ici}
+		\Break
+		
+	}
+}
+\tcc{Retourner le résultat du solver qui est donc la solution avec la $ValeurPrefMin$ maximale et la plus grande satisfaction}
+\Return{ResultSolver}
+\end{algorithm}
+
+Cette méthode n'a pas la meilleur complexité et peut considérablement allonger les temps de résolution du modèle. C'est pour cela que nous proposons la méthode dichotomique.
+
+\subparagraph{Recherche de $ValeurPrefMin$ dichotomique}
+\begin{algorithm}
+\caption{Recherche de $ValeurPrefMin$ dichotomique} 
+\label{chap:problem_affectation:algo:recherche_dichotomique}
+
+\tcc{Init variable résultat du solver, contient $ResultSolver.data$ et $ResultSolver.state$}
+$ResultSolverFinal \gets Null$ \\
+$deb \gets 1$ \\
+$fin \gets nbProjet$ \\
+$mil \gets \frac{deb+fin}{2}$ \\
+\While{$deb<fin$}
+{
+	$ResultSolverTemp=SolverModel(mil)$\\
+\If{$ResultSolverTemp.state=Success$}
+{
+$deb=mil+1$\\
+$ResultSolverFinal=ResultSolverTemp$\\
+$mil \gets \frac{deb+fin}{2}$ \\
+}
+\Else
+{
+	$fin=mil-1$\\
+	$mil \gets \frac{deb+fin}{2}$ \\
+}
+}
+
+\Return{$ResultSolverFinal$}
+\end{algorithm}
+\paragraph{Solution 2}
+On change la nature de $ValeurPrefMin$ et elle devient donc une \textbf{variable} intervenant dans la fonction objectif.
+L'idée derrière cette modification est de demander, en plus de la maximisation de la préférence moyenne, une maximisation de la $ValeurPrefMin$.
+
+\subparagraph{Méthode par agrégation}
+On peut rajouter $ValeurPrefMin$ dans la fonction objectif en faisant une simple somme (Cf. \eqref{eqn:max_obj_aggregation})
+
+\begin{equation}
+\label{eqn:max_obj_aggregation}
+\text{maximiser} \left( ValeurPrefMin + \sum_{(i \in Individus)} \sum_{(p\in Projets)} affectation[i,p]\times preference[i,p] \right)
+\end{equation}
+
+Cette agrégation permettra donc de chercher aussi a maximiser la $ValeurPrefMin$. Cependant, elle ne le sera pas au même titre que la satisfaction moyenne car il peut être plus avantageux de chercher à maximiser d'avantage la satisfaction que la $ValeurPrefMin$.
+
+\subparagraph{Méthode de combinaison linéaire des variables}
+Pour cela, on peut ajouter des poids $\alpha, \beta$ deux nombres donnés qui peuvent servir à donner plus d'importance à la $ValeurPrefMin$ ou à la satisfaction générale (Cf. \eqref{eqn:max_obj_combi_lineaire}).
+
+\begin{equation}
+\label{eqn:max_obj_combi_lineaire}
+\text{maximiser} \left( \alpha ValeurPrefMin + \beta \sum_{(i \in Individus)} \sum_{(p\in Projets)} affectation[i,p]\times preference[i,p] \right)
+\end{equation}
+
 %=========END chap 1================
 
 \end{document}
