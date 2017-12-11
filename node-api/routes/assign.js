@@ -34,7 +34,6 @@ function readCplexFromFile(lp, filename){
 function readMathprogFromFile(tran, filename, skip, datas){
     var str = fs.readFileSync(filename).toString() + "\n" + datas;
 		console.log(str);
-		console.log(str);
     var pos = 0;
     glpk.glp_mpl_read_model(tran, null,
         function(){

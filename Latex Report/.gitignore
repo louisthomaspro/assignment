@@ -21,3 +21,9 @@
 *.mtc1
 *.out
 *.synctex.gz
+*.bcf
+*.loa
+*.run.xml
+*.synctex(busy)
+*.fdb_latexmk
+*.REMOVE_MY_EXTENSION
