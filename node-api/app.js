@@ -15,6 +15,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var tasks = require('./routes/tasks');
 var solver = require('./routes/solver');
+var assign = require('./routes/assign');
 
 var list = require('./routes/list');
 
@@ -35,13 +36,13 @@ var jwtCheck = jwt({
 });
 
 
-app.use(jwtCheck);
-
-app.use(function (err, req, res, next) {
-  if (err.name === 'UnauthorizedError') {
-    res.status(401).json({message:'Missing or invalid token'});
-  }
-});
+// app.use(jwtCheck);
+//
+// app.use(function (err, req, res, next) {
+//   if (err.name === 'UnauthorizedError') {
+//     res.status(401).json({message:'Missing or invalid token'});
+//   }
+// });
 
 
 // view engine setup
@@ -62,6 +63,7 @@ app.use('/users', users);
 app.use('/tasks', tasks);
 app.use('/solver', solver);
 app.use('/list', list);
+app.use('/assign', assign);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -83,6 +85,6 @@ app.use(function(err, req, res, next) {
 
 
 
-app.listen(8080);
+app.listen(36);
 console.log('Working !');
 module.exports = app;

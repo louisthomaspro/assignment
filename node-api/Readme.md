@@ -47,3 +47,5 @@ create list : post(/list/create) +mail(exemple@gmail.com) +url(http://localhost:
  - Secure backend API - [https://scotch.io/tutorials/building-and-securing-a-modern-backend-api](https://scotch.io/tutorials/building-and-securing-a-modern-backend-api)
  - Angular + API - [https://medium.com/craft-academy/connecting-an-api-to-an-angular-4-front-end-application-e0fc9ea33202](https://medium.com/craft-academy/connecting-an-api-to-an-angular-4-front-end-application-e0fc9ea33202)
  - Angular - [https://angular.io/docs](https://angular.io/docs)
+
+npm install https://git@github.com/hgourvest/glpk.js.git
