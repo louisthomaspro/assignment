@@ -31,9 +31,9 @@ function readCplexFromFile(lp, filename){
     )
 }
 
-function readMathprogFromFile(tran, filename, skip, datas){
-    var str = fs.readFileSync(filename).toString() + "\n" + datas;
-		console.log(str);
+function readMathprogFromFile(tran, filename, skip, dat){
+    var str = fs.readFileSync(filename).toString() + "\n" + dat;
+		//console.log(str);
     var pos = 0;
     glpk.glp_mpl_read_model(tran, null,
         function(){
@@ -57,19 +57,19 @@ cplex = function(file, datas){
     var iocp = new glpk.IOCP({presolve: glpk.GLP_ON});
     glpk.glp_intopt(lp, iocp);
 
-    console.log("obj: " + glpk.glp_mip_obj_val(lp));
+    //console.log("obj: " + glpk.glp_mip_obj_val(lp));
     for( var i = 1; i <= glpk.glp_get_num_cols(lp); i++){
-        console.log(glpk.glp_get_col_name(lp, i)  + " = " + glpk.glp_mip_col_val(lp, i));
+        //console.log(glpk.glp_get_col_name(lp, i)  + " = " + glpk.glp_mip_col_val(lp, i));
     }
 };
 
-mathprog = function (file, datas){
+mathprog = function (file, dat){
     var lp = glpk.glp_create_prob();
     var tran = glpk.glp_mpl_alloc_wksp();
     glpk._glp_mpl_init_rand(tran, 1);
-    readMathprogFromFile(tran, __dirname + "/" + file, false, datas);
+    readMathprogFromFile(tran, __dirname + "/" + file, false, dat);
 
-    glpk.glp_mpl_generate(tran, null, console.log);
+    glpk.glp_mpl_generate(tran, null, glpk_print);
     /* build the problem instance from the model */
     glpk.glp_mpl_build_prob(tran, lp);
 
@@ -94,7 +94,7 @@ mathprog = function (file, datas){
 
     glpk.glp_intopt(lp, iocp);
     glpk.glp_mpl_postsolve(tran, lp, glpk.GLP_MIP);
-    console.log("obj: " + glpk.glp_mip_obj_val(lp));
+    //console.log("obj: " + glpk.glp_mip_obj_val(lp));
 		var results = [];
     for( var i = 1; i <= glpk.glp_get_num_cols(lp); i++){
 		var item = [glpk.glp_mip_col_val(lp, i)];
@@ -105,12 +105,67 @@ mathprog = function (file, datas){
 
 };
 
+function glpk_print(string) {
+	console.log(string);
+}
+
 router.post('/',function(req,res,next){
-	var datas = req.body.datas;
-	require("repl").start("");
-	glpk.glp_set_print_func(console.log);
-	var f = mathprog("assign.mod", datas);
-	res.json(f);
+	var params = JSON.parse(req.body.params);
+	var array = JSON.parse(req.body.array);
+	
+	// Inverted value of wishes (ex : 1 -> 5, 3 -> 2...) preference=nbProjet + 1 - wishvalue
+	for (var etu in array) {
+		for (var project in array[etu]) {
+			array[etu][project] = params.nbProjects + 1 - array[etu][project];
+		}
+	}
+	
+	// Generate .dat text
+  var dat ='data;\n'+
+    'param nbStudents :='+params.nbStudents+';\n'+
+		'param nbProjects :='+params.nbProjects+ ';\n'+
+		'param maxStudentsPerProjects :='+params.maxStudentsPerProjects+ ';\n'+
+		'param minStudentsPerProjects :='+params.minStudentsPerProjects+ ';\n'+
+		'param ProjectsPerStudents :='+params.ProjectsPerStudents+ ';\n'+
+		'param preference : ';
+		
+	
+	for (var i=1;i<=params.nbProjects;i++) dat+=i+' ';  // ex : param preference : 1 2 3 4 5 :=
+  dat += ':=\n';
+  
+  // Generate wish table parameters
+  // ex :
+  // 1   1 5 3 2 4 
+  // 2   4 5 1 2 3
+  // ...
+	for (var etu in array) {
+		dat+=parseInt(etu)+1+'   ';
+		for (var project in array[etu]) {
+			dat+=array[etu][project]+' ';
+		}
+		dat+="\n";
+  }
+  dat+=";\nend;";
+	
+	
+	// require("repl").start("");
+	// glpk.glp_set_print_func(console.log);
+	var response = mathprog("assign.mod", dat);
+	
+	// response : [[0],[1],[0],[0],[0],[0],[1],[0],[0],[0],[1],[0],[0],[0],[0],[0],[0],[0],[0],[1],[0],[0],[0],[0],[1],[0],[1],[0],[0],[0],[0],[0],[0],[1],[0],[0],[0],[0],[1],[0],[0],[0],[1],[0],[0],[1],[0],[0],[0],[0],[0],[0],[1],[0],[0],[0],[0],[0],[0],[1],[4],[0]]
+  // convert to this type [[1,2],[2,4],[3,1]....]
+	var results = [];
+  var index=0;
+	for (var i=1;i<=params.nbStudents;i++) {
+    for (var j=1;j<=params.nbProjects;j++) {
+      if (response[index]==1){
+        results.push([i,j]);
+      }
+      index++;
+    }
+  }
+	
+	res.json(results);
 });
 
 module.exports = router;
