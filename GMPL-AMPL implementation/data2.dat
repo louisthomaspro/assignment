@@ -1,0 +1,3 @@
+data;
+param minPreferenceValue:=11;
+end;

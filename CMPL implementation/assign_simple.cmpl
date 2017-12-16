@@ -1,0 +1,19 @@
+%data : students set,projects set,preference, minPreferenceValue 
+
+parameters:
+	maxStudentsPerProjects:=3;
+	minStudentsPerProjects:=0;
+
+variables:
+	affectation[students,projects]: binary;
+
+objectives:
+	sum{ [i,j] in students,projects : affectation[i,j]*preference[i,j] } -> max ;
+	#sum{i in students :  sum{j in projects : preference[i,j]*affectation[i,j] } } -> max ;
+
+constraints:
+	howManyProjectsPerStudents{i in students} sum{j in projects} affectation[i,j] = ProjectsPerStudents;
+	howManyStudentsPerProjectsMax{j in projects} sum{i in students} affectation[i,j] <= maxStudentsPerProjects;
+	minPreference{i in students} sum{j in projects} affectation[i,j]*preference[i,j] >= minPreferenceValue;
+	#sos_m { i in machines:  sum{ j in (A *> [i,*])  : x[i,j] } = 1; }
+	#sos_l { j in locations: sum{ i in (A *> [*,j])  : x[i,j] } <= 1; }
