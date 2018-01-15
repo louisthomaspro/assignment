@@ -31,8 +31,7 @@ function readCplexFromFile(lp, filename){
     )
 }
 
-function readMathprogFromFile(tran, filename, skip, dat){
-    var str = fs.readFileSync(filename).toString() + "\n" + dat;
+function readMathprogFromFile(tran, str, skip, dat){
 		//console.log(str);
     var pos = 0;
     glpk.glp_mpl_read_model(tran, null,
@@ -63,11 +62,11 @@ cplex = function(file, datas){
     }
 };
 
-mathprog = function (file, dat){
+mathprog = function (str){
     var lp = glpk.glp_create_prob();
     var tran = glpk.glp_mpl_alloc_wksp();
     glpk._glp_mpl_init_rand(tran, 1);
-    readMathprogFromFile(tran, __dirname + "/" + file, false, dat);
+    readMathprogFromFile(tran, str, false);
 
     glpk.glp_mpl_generate(tran, null, glpk_print);
     /* build the problem instance from the model */
@@ -97,45 +96,48 @@ mathprog = function (file, dat){
     //console.log("obj: " + glpk.glp_mip_obj_val(lp));
 		var results = [];
     for( var i = 1; i <= glpk.glp_get_num_cols(lp); i++){
-		var item = [glpk.glp_mip_col_val(lp, i)];
-		results.push(item );
+			var item = [glpk.glp_mip_col_val(lp, i)];
+			results.push(item);
         //console.log(glpk.glp_get_col_name(lp, i)  + " = " + glpk.glp_mip_col_val(lp, i));
     }
-		return results;
+		return [results, glpk.glp_mip_obj_val(lp)];
 
 };
 
 function glpk_print(string) {
-	console.log(string);
+	//console.log(string);
+}
+
+function minPreferenceValue(value) {
+  return 'param minPreferenceValue :='+value+';\n';
 }
 
 router.post('/',function(req,res,next){
 	var params = JSON.parse(req.body.params);
 	var array = JSON.parse(req.body.array);
-	
-	// Inverted value of wishes (ex : 1 -> 5, 3 -> 2...) preference=nbProjet + 1 - wishvalue
+
+	// Inverted value of wishes (ex : 1 -> 5, 3 -> 2...) preference=nbProjet + 1 - preference
 	for (var etu in array) {
 		for (var project in array[etu]) {
 			array[etu][project] = params.nbProjects + 1 - array[etu][project];
 		}
 	}
-	
-	// Generate .dat text
-  var dat ='data;\n'+
+
+	// Generate text for .dat
+  // get params
+  var dat =
     'param nbStudents :='+params.nbStudents+';\n'+
 		'param nbProjects :='+params.nbProjects+ ';\n'+
 		'param maxStudentsPerProjects :='+params.maxStudentsPerProjects+ ';\n'+
 		'param minStudentsPerProjects :='+params.minStudentsPerProjects+ ';\n'+
-		'param ProjectsPerStudents :='+params.ProjectsPerStudents+ ';\n'+
-		'param preference : ';
-		
-	
+		'param ProjectsPerStudents :='+params.ProjectsPerStudents+ ';\n';
+
+	// Generate wish table parameters
+  dat += 'param preference : ';
 	for (var i=1;i<=params.nbProjects;i++) dat+=i+' ';  // ex : param preference : 1 2 3 4 5 :=
   dat += ':=\n';
-  
-  // Generate wish table parameters
   // ex :
-  // 1   1 5 3 2 4 
+  // 1   1 5 3 2 4
   // 2   4 5 1 2 3
   // ...
 	for (var etu in array) {
@@ -145,26 +147,36 @@ router.post('/',function(req,res,next){
 		}
 		dat+="\n";
   }
-  dat+=";\nend;";
-	
-	
-	// require("repl").start("");
-	// glpk.glp_set_print_func(console.log);
-	var response = mathprog("assign.mod", dat);
-	
+  dat+=";\n";
+
+
+  var mod_url = __dirname + "/assign.mod";
+  var mod = fs.readFileSync(mod_url).toString() + "\n";
+
+  // On va tester
+  var response;
+  for (var i=params.nbProjects;i>=1;i--) {
+    var str = mod+'data;\n'+dat+minPreferenceValue(i)+"end;";
+    response = mathprog(str);
+    if (response[1] != 0) { // Le solver a réussi
+      break;
+    }
+  }
+
+  //console.log(response);
 	// response : [[0],[1],[0],[0],[0],[0],[1],[0],[0],[0],[1],[0],[0],[0],[0],[0],[0],[0],[0],[1],[0],[0],[0],[0],[1],[0],[1],[0],[0],[0],[0],[0],[0],[1],[0],[0],[0],[0],[1],[0],[0],[0],[1],[0],[0],[1],[0],[0],[0],[0],[0],[0],[1],[0],[0],[0],[0],[0],[0],[1],[4],[0]]
   // convert to this type [[1,2],[2,4],[3,1]....]
 	var results = [];
   var index=0;
 	for (var i=1;i<=params.nbStudents;i++) {
     for (var j=1;j<=params.nbProjects;j++) {
-      if (response[index]==1){
+      if (response[0][index]==1){
         results.push([i,j]);
       }
       index++;
     }
   }
-	
+
 	res.json(results);
 });
 

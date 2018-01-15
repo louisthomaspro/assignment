@@ -44,7 +44,7 @@ var affectation{i in I, j in J}, binary, >= 0;
    declare them so due to the totally unimodular constraint matrix */
    
 
-var minPreferenceValue, integer, >=0, <=nbProjects;
+param minPreferenceValue, integer, >=0, <=nbProjects;
 
 var minStudentsPP, integer, >=0 , <= nbProjects;
 /* Faire au mieux pour eviter que quelqu'un soit seul sur un projet*/
