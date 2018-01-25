@@ -82,13 +82,49 @@ public class MathProgParser {
 		
 		java.util.regex.Matcher m = paramPattern.matcher(mpgString) ;  
 		  
-		 while (m.find()) {
-		    System.out.println("groupe = " + m.group()) ;
-		}
 		
-		return null;
+		ArrayList<Param> params=new ArrayList<>();
+		//Ajouter les parametres à l'arrayList
+		String param;
+		 while (m.find()) {
+			 
+			 param=m.group();
+			 //Verifier que le parametre n'est pas initialisé donc ne contient pas :=
+			 if(!param.contains(":="))
+			 {
+				 
+				 Param parameter=new Param(parseName(param), parseType(param));
+				 params.add(parameter);
+				 System.out.println(param+parameter.name+parameter.type);
+			 }
+			 
+		}
+		 
+		
+		return params;
 	}
 	
+	/**
+	 * Retrouve le type de la variable de la déclaration du parametre mathprog
+	 * @param paramStr
+	 * @return
+	 */
+	public static int parseType(String paramStr)
+	{
+		
+		
+		return 0;
+	}
+	
+	/**
+	 * Retrouve le nom de la variable déclaré en mathprog
+	 * @param paramStr
+	 * @return
+	 */
+	public static String parseName(String paramStr)
+	{
+		return paramStr.replaceAll("param\\s+|[:;,{].*","");
+	}
 	
 	public static void main(String args[]) throws FileNotFoundException
 	{
