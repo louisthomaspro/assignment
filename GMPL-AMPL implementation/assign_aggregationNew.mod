@@ -1,14 +1,5 @@
-param units{raw, prd} >= 0;
-param profit{prd, 1..T+1};
-param N := 20 integer >= 0 <= 100;
-param comb ’n choose k’ {n in 0..N, k in 0..n} :=
-if k = 0 or k = n then 1 else comb[n-1,k-1] + comb[n-1,k];
-param p{i in I, j in J}, integer, >= 0, <= i+j, in A[i] symdiff B[j],
-in C[i,j], default 0.5 * (i + j);
-param month symbolic default ’May’ in {’Mar’, ’Apr’, ’May’};
-
 /* ASSIGN, Assignment Problem */
-#BONJOUR PUTIN
+
 /* Written in GNU MathProg by Andrew Makhorin <mao@gnu.org> */
 
 /* The assignment problem is one of the fundamental combinatorial
@@ -24,11 +15,11 @@ param month symbolic default ’May’ in {’Mar’, ’Apr’, ’May’};
 
    (From Wikipedia, the free encyclopedia.) */
 
-param nbStudents:=2, integer, > 0;
-/* number of students */
+set students;
+/*Students super set, basically the name of the students*/
 
-param nbProjects, integer, > 0;
-/* number of projects */
+set projects;
+/*Projects super set, basically the name of the projects*/
 
 param maxStudentsPerProjects, integer, >0;
 
@@ -38,13 +29,17 @@ param minStudentsPerProjects, integer, >=0;
 param ProjectsPerStudents, integer, >=0;
 
 
-set I := 1..nbStudents;
+param nbStudents:=card(students);
+
+param nbProjects:=card(projects);
+
+set I:= students;
 /* set of students */
 
-set J := 1..nbProjects;
+set J:= projects;
 /* set of projects */
 
-param preference{i in I ,j in J}, >= 0;
+param preference{i in I ,j in J};
 /* cost of allocating project j to student i */
 
 var affectation{i in I, j in J}, binary, >= 0;
@@ -70,15 +65,15 @@ s.t. minPreference{i in I}: sum{j in J} affectation[i,j]*preference[i,j] >= minP
 
 s.t. howManyStudentsPerProjectsMin{j in J}: sum{i in I} affectation[i,j] >= minStudentsPP;
 
-maximize obj: minPreferenceValue + sum{i in I, j in J} preference[i,j] * affectation[i,j] ;#+ minStudentsPP;
-#maximize obj:  sum{i in I, j in J} preference[i,j] * affectation[i,j];
+maximize obj: minPreferenceValue + sum{i in I, j in J} preference[i,j] * affectation[i,j] ;
 /* the objective is to find a best solution in term of mean preference and justice*/
 
 solve;
 
 printf "\n";
 printf "Student\tProject-Number Students\n";
-printf{i in I} "%7d\t%7d\t%10g\n", i, sum{j in J} j * affectation[i,j],
+printf{i in I} "%10s\t%10s\t%10g\n",i,
+	{j in J} if affectation[i,j]=1 then i,
    sum{j in J} preference[i,j] * affectation[i,j];
 printf "----------------------------\n";
 printf "          Total: %10g\n", sum{i in I, j in J} preference[i,j] * affectation[i,j];
@@ -86,15 +81,15 @@ printf "Min  Preference: %10g\n",minPreferenceValue;
 printf "Total Objective: %10g\n", obj;
 printf "----------------------------\n";
 printf "Project\tNb Students\n";
-printf {j in J} "%7d\t%7d\n" , j, sum{i in I} affectation[i,j];
+printf {j in J} "%10s\t%7d\n" , j, sum{i in I} affectation[i,j];
 printf "\n";
 
-/*
+
 data;
 
-param nbStudents :=10;
+set projects := A B C D E;
 
-param nbProjects :=5;
+set students := O P Q R S T U V W X;
 
 param maxStudentsPerProjects := 2;
 
@@ -102,17 +97,16 @@ param minStudentsPerProjects := 0;
 
 param ProjectsPerStudents := 1;
 
-param preference : 1 2 3 4 5 :=
-		   1   1 5 3 2 4 
-		   2   1 2 3 5 4
-		   3   1 2 3 1 4 
-		   4   3 4 2 1 5 
-		   5   2 3 1 4 5 
-		   6   3 5 4 2 1 
-		   7   4 2 3 5 1 
-		   8   2 3 1 4 5 
-		   9   3 4 5 1 2 
-		   10  5 1 2 3 4 ;
+param preference : A B C D E :=
+		   O   1 5 3 2 4 
+		   P   1 2 3 5 4
+		   Q   1 2 3 1 4 
+		   R   3 4 2 1 5 
+		   S   2 3 1 4 5 
+		   T   3 5 4 2 1 
+		   U   4 2 3 5 1 
+		   V   2 3 1 4 5 
+		   W   3 4 5 1 2 
+		   X  5 1 2 3 4 ;
 
-		   */
 end;

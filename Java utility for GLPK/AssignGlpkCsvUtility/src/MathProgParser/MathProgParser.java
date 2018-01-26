@@ -111,8 +111,18 @@ public class MathProgParser {
 	 */
 	public static int parseType(String paramStr)
 	{
-		
-		
+		if(paramStr.contains("integer"))
+		{
+			return Param.INTEGER;
+		}
+		else if(paramStr.contains("binary"))
+		{
+			return Param.BINARY;
+		}
+		else if(paramStr.contains("symbolic")) 
+		{
+			
+		}
 		return 0;
 	}
 	
@@ -121,9 +131,13 @@ public class MathProgParser {
 	 * @param paramStr
 	 * @return
 	 */
+	public static Pattern paramPattern= Pattern.compile("param\\s+\\w+");
+	public static Matcher nameMatcher;
 	public static String parseName(String paramStr)
 	{
-		return paramStr.replaceAll("param\\s+|[:;,{].*","");
+		nameMatcher = paramPattern.matcher(paramStr) ;
+		nameMatcher.find();
+		return nameMatcher.group().replaceFirst("param\\s+","");
 	}
 	
 	public static void main(String args[]) throws FileNotFoundException
