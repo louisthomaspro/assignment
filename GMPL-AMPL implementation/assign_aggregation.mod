@@ -68,7 +68,7 @@ maximize obj: minPreferenceValue + sum{i in I, j in J} preference[i,j] * affecta
 solve;
 
 printf "\n";
-printf "Student\tProject-Number Students\n";
+printf "Student\tProject-Number Preference\n";
 printf{i in I} "%7d\t%7d\t%10g\n", i, sum{j in J} j * affectation[i,j],
    sum{j in J} preference[i,j] * affectation[i,j];
 printf "----------------------------\n";

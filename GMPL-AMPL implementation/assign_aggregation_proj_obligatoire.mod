@@ -24,10 +24,8 @@ param nbProjects, integer, > 0;
 param maxStudentsPerProjects, integer, >0;
 
 param minStudentsPerProjects, integer, >=0;
-/* Not used yet to determine how much students we want per projects*/
 
 param ProjectsPerStudents, integer, >=0;
-
 
 set I := 1..nbStudents;
 /* set of students */
@@ -49,8 +47,6 @@ var affectation{i in I, j in J}, binary, >= 0;
 
 var minPreferenceValue, integer, >=0, <=nbProjects;
 
-var minStudentsPP, integer, >=0 , <= nbProjects;
-/* Faire au mieux pour eviter que quelqu'un soit seul sur un projet*/
    
 s.t. howManyProjectsPerStudents{i in I}: sum{j in J} affectation[i,j] = ProjectsPerStudents;
 /* each student can perform at most one project */
@@ -58,14 +54,11 @@ s.t. howManyProjectsPerStudents{i in I}: sum{j in J} affectation[i,j] = Projects
 s.t. howManyStudentsPerProjectsMax{j in J}: sum{i in I} affectation[i,j] <= maxStudentsPerProjects;
 /* each project must be assigned exactly to one student */
 
-#s.t. howManyStudentsPerProjectsMin{j in J}: sum{i in I} affectation[i,j] >= minStudentsPerProjects;
 
 s.t. minPreference{i in I}: sum{j in J} affectation[i,j]*preference[i,j] >= minPreferenceValue;
 
-s.t. howManyStudentsPerProjectsMin{j in J}: sum{i in I} affectation[i,j] >= minStudentsPP;
 
-s.t. mandatoryProjects{j in J}: mandatoryProjects[j] * (sum{i in I} affectation[i,j]) > minStudentsPP*(1-mandatoryProjects[j]);
-
+s.t. mandatoryProjectsST{j in J}: mandatoryProjects[j] * (sum{i in I} affectation[i,j]) >= mandatoryProjects[j];
 
 maximize obj:  minPreferenceValue + sum{i in I, j in J} preference[i,j] * affectation[i,j] ;
 
@@ -74,7 +67,7 @@ maximize obj:  minPreferenceValue + sum{i in I, j in J} preference[i,j] * affect
 solve;
 
 printf "\n";
-printf "Student\tProject-Number Students\n";
+printf "Student\tProject-Number Preference\n";
 printf{i in I} "%7d\t%7d\t%10g\n", i, sum{j in J} j * affectation[i,j],
    sum{j in J} preference[i,j] * affectation[i,j];
 printf "----------------------------\n";
@@ -82,8 +75,8 @@ printf "          Total: %10g\n", sum{i in I, j in J} preference[i,j] * affectat
 printf "Min  Preference: %10g\n",minPreferenceValue;
 printf "Total Objective: %10g\n", obj;
 printf "----------------------------\n";
-printf "Project\tNb Students\n";
-printf {j in J} "%7d\t%7d\n" , j, sum{i in I} affectation[i,j];
+printf "Project\tNb Students\tMandatory\n";
+printf {j in J} "%7d\t%7d\t%7d\n" , j, sum{i in I} affectation[i,j],mandatoryProjects[j];
 printf "\n";
 
 /*
@@ -98,8 +91,6 @@ param maxStudentsPerProjects := 2;
 param minStudentsPerProjects := 0;
 
 param ProjectsPerStudents := 1;
-
-param PoidsObjectif :=1;
 
 param mandatoryProjects := 1 0 0 1 0;
 
