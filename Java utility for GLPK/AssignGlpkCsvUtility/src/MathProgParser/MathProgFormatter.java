@@ -123,4 +123,21 @@ public class MathProgFormatter {
 		return formattedMtx;
 		
 	}
+	
+	/**
+	 * Prints the content of paramSetData in mathprog format
+	 * @param out: the printstream to print the data on
+	 * @param set_name: the name of the variable
+	 * @param paramSetData:the arraylist containing the data
+	 */
+	public static void printlnParamSet(PrintStream out,String set_name, ArrayList<String> paramSetData) {
+		
+		out.printf("param %s:=",set_name);
+		out.println();
+		for(int i=0; i<paramSetData.size();i++)
+		{
+			out.printf("%d\t%s%s",i,paramSetData.get(i),System.lineSeparator());
+		}
+		out.println(";");
+	}
 }
