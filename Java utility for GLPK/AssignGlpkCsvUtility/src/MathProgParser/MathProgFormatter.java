@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class MathProgFormatter {
 
@@ -139,5 +140,18 @@ public class MathProgFormatter {
 			out.printf("%d\t%s%s",i,paramSetData.get(i),System.lineSeparator());
 		}
 		out.println(";");
+	}
+	
+	public static void main(String[] args)
+	{
+		ArrayList<String> params = new ArrayList<>();
+		Random r=new Random();
+		
+		
+		for(int i=0;i<10; i++) {
+			params.add(""+r.nextInt(2));
+		}
+		
+		printlnParamSet(System.out,"mandatoryProjects", params);
 	}
 }
