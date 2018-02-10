@@ -321,4 +321,29 @@ Pour cela, on peut ajouter des poids $\alpha, \beta$ deux nombres donnés qui pe
 
 %=========END chap 1================
 
+
+%=========BEGIN chap 2================
+\chapter{Programmation linéaire et résolution GMPL-Mathprog}
+
+Pour mettre en application notre modèle mathématique, nous avons choisi d'utiliser le solver GLPK et d'écrire notre modèle en GMPL aussi connu sous le nom de Mathprog.
+
+En effet, nous avons précédemment formalisé le modèle du problème d'affectation et il ne reste plus qu'à le traduire en langage informatique pour qu'un solver une solution optimisée qui respecte toutes les contraintes.
+
+Un solver est un machine à calculer équipé d'algorithmes d'optimisation permettant de trouver la solution à un modèle mathématique.
+
+Nous avons choisi GLPK car c'est un solver libre multi-plateforme qu'il est possible d'intégrer dans tout type d'applications à travers des librairies.
+
+\section{Une histoire d'optimisation}
+
+Tel que nous l'avons défini, le problème problème d'affectation est un problème d'optimisation linéaire. 
+
+Ce qui peut rendre la résolution du problème compliqué est le fait que les variables de décision, dans notre cas les \textit{affectations} doivent être des nombres entiers. En effet, un étudiant ne peux pas être affecté à 0,5 projet.
+
+Le problème d'affectation peut être résolu par GLPK car il s'agit d'un problème linéaire. Les données à déterminer ne sont que des combinaisons linéaires les unes des autres. 
+
+Alors il existe des méthodes de résolution efficaces pour les résoudre.
+
+
+%=========END chap 2================
+
 \end{document}
