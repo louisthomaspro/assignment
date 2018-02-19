@@ -37,17 +37,17 @@ param preference{i in I ,j in J}, >= 0;
 /* cost of allocating project j to student i */
 
 param mandatoryProjects{j in J}, binary, >=0;
-/* set of mandatory projects, 1 means mandatory project, 0 optional */ 
+/* set of mandatory projects, 1 means mandatory project, 0 optional */
 
 var affectation{i in I, j in J}, binary, >= 0;
 /* affectation[i,j] = 1 means projects j is assigned to student i
    note that variables affectation[i,j] are binary, however, there is no need to
    declare them so due to the totally unimodular constraint matrix */
-   
+
 
 var minPreferenceValue, integer, >=0, <=nbProjects;
 
-   
+
 s.t. howManyProjectsPerStudents{i in I}: sum{j in J} affectation[i,j] = ProjectsPerStudents;
 /* each student can perform at most one project */
 
@@ -79,7 +79,7 @@ printf "Project\tNb Students\tMandatory\n";
 printf {j in J} "%7d\t%7d\t%7d\n" , j, sum{i in I} affectation[i,j],mandatoryProjects[j];
 printf "\n";
 
-/*
+
 data;
 
 param nbStudents :=10;
@@ -95,16 +95,16 @@ param ProjectsPerStudents := 1;
 param mandatoryProjects := 1 0 0 1 0;
 
 param preference : 1 2 3 4 5 :=
-		   1   1 5 3 2 4 
+		   1   1 5 3 2 4
 		   2   1 2 3 5 4
-		   3   1 2 3 1 4 
-		   4   3 4 2 1 5 
-		   5   2 3 1 4 5 
-		   6   3 5 4 2 1 
-		   7   4 2 3 5 1 
-		   8   2 3 1 4 5 
-		   9   3 4 5 1 2 
+		   3   1 2 3 1 4
+		   4   3 4 2 1 5
+		   5   2 3 1 4 5
+		   6   3 5 4 2 1
+		   7   4 2 3 5 1
+		   8   2 3 1 4 5
+		   9   3 4 5 1 2
 		   10  5 1 2 3 4 ;
-		   
-		   */
+
+
 end;

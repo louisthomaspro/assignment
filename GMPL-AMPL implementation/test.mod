@@ -78,3 +78,38 @@ printf "----------------------------\n";
 printf "Project\tNb Students\tMandatory\n";
 printf {j in J} "%7d\t%7d\t%7d\n" , j, sum{i in I} affectation[i,j],mandatoryProjects[j];
 printf "\n";
+
+data;
+param nbStudents :=10;
+param nbProjects :=13;
+param maxStudentsPerProjects :=1;
+param minStudentsPerProjects :=0;
+param ProjectsPerStudents :=1;
+param preference : 1 2 3 4 5 6 7 8 9 10 11 12 13 :=
+1   13 12 11 10 9 8 7 6 5 4 3 2 1
+2   13 12 11 10 9 8 7 6 5 4 3 2 1
+3   13 12 11 10 9 8 7 6 5 4 3 2 1
+4   13 12 11 10 9 8 7 6 5 4 3 2 1
+5   13 12 11 10 9 8 7 6 5 4 3 2 1
+6   13 12 11 10 9 8 7 6 5 4 3 2 1
+7   13 12 11 10 9 8 7 6 5 4 3 2 1
+8   13 12 11 10 9 8 7 6 5 4 3 2 1
+9   13 12 11 10 9 8 7 6 5 4 3 2 1
+10   13 12 11 10 9 8 7 6 5 4 3 2 1
+;
+param mandatoryProjects :=
+1   0
+2   0
+3   0
+4   0
+5   0
+6   0
+7   0
+8   0
+9   0
+10   0
+11   0
+12   0
+13   0
+;
+end;
