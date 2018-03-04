@@ -60,7 +60,7 @@ s.t. minPreference{i in I}: sum{j in J} affectation[i,j]*preference[i,j] >= minP
 
 s.t. mandatoryProjectsST{j in J}: mandatoryProjects[j] * (sum{i in I} affectation[i,j]) >= mandatoryProjects[j];
 
-maximize obj:  minPreferenceValue + sum{i in I, j in J} preference[i,j] * affectation[i,j] ;
+maximize obj:  1000*minPreferenceValue + sum{i in I, j in J} preference[i,j] * affectation[i,j] ;
 
 /* the objective is to find a best solution in term of mean preference and justice*/
 
@@ -92,7 +92,13 @@ param minStudentsPerProjects := 0;
 
 param ProjectsPerStudents := 1;
 
-param mandatoryProjects := 1 0 0 1 0;
+param mandatoryProjects := 
+1	1
+2	0
+3	0
+4 	1
+5	0
+;
 
 param preference : 1 2 3 4 5 :=
 		   1   1 5 3 2 4

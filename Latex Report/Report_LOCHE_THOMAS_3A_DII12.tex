@@ -50,6 +50,12 @@
 \chapter*{Introduction}
 \label{chap:intro}
 
+Tous les ans, dans toutes les promotions d'étudiants ingénieurs de Polytech Tours, d'intenses débats ont lieu au moment des affectations de projets. En effet, chacun souhaite avoir le projet qui lui plaît de le plus. Pour aider à régler ces problèmes, nous avons proposé de travailler sur un outil d'aide à l'affectation des projets étudiants. 
+
+A travers ce projet, nous verrons comment il est possible de résoudre le problème d'affectation afin que chacun soit satisfait de son affectation.
+
+Nous aborderons alors comment nous avons modélisé ce problème puis avec quels outils nous avons travailler pour arriver à un outils de saisie et de résolution des affectations.
+
 %=========BEGIN chap 1=============
 \chapter{Le problème d'affectation}
 \label{chap:pb_affectation}
@@ -327,21 +333,29 @@ Pour cela, on peut ajouter des poids $\alpha, \beta$ deux nombres donnés qui pe
 
 Pour mettre en application notre modèle mathématique, nous avons choisi d'utiliser le solver GLPK et d'écrire notre modèle en GMPL aussi connu sous le nom de Mathprog.
 
-En effet, nous avons précédemment formalisé le modèle du problème d'affectation et il ne reste plus qu'à le traduire en langage informatique pour qu'un solver une solution optimisée qui respecte toutes les contraintes.
+En effet, nous avons précédemment formalisé le modèle du problème d'affectation et il ne reste plus qu'à le traduire en langage informatique pour qu'un solver trouve une solution optimisée qui respecte toutes les contraintes.
 
-Un solver est un machine à calculer équipé d'algorithmes d'optimisation permettant de trouver la solution à un modèle mathématique.
+Un solver est un machine à calculer équipé d'algorithmes d'optimisation permettant de trouver la solution à un modèle mathématique qui maximise (minimise, ou se rapproche d'une valeur donné) au mieux la fonction objectif.
 
 Nous avons choisi GLPK car c'est un solver libre multi-plateforme qu'il est possible d'intégrer dans tout type d'applications à travers des librairies.
 
 \section{Une histoire d'optimisation}
 
-Tel que nous l'avons défini, le problème problème d'affectation est un problème d'optimisation linéaire. 
+Tel que nous l'avons défini, le problème d'affectation est un problème d'optimisation linéaire. 
 
 Ce qui peut rendre la résolution du problème compliqué est le fait que les variables de décision, dans notre cas les \textit{affectations} doivent être des nombres entiers. En effet, un étudiant ne peux pas être affecté à 0,5 projet.
 
-Le problème d'affectation peut être résolu par GLPK car il s'agit d'un problème linéaire. Les données à déterminer ne sont que des combinaisons linéaires les unes des autres. 
+Le problème d'affectation peut être résolu par GLPK car il s'agit d'un problème linéaire. Les données à déterminer ne sont que des combinaisons linéaires les unes des autres. Comme il s'agit d'un problème dont les solutions sont des nombres entiers, nous avons utilisé la programmation linéaire en nombre entiers (PLNE) pour le résoudre. 
 
-Alors il existe des méthodes de résolution efficaces pour les résoudre.
+Alors il existe des méthodes de résolution efficaces pour les résoudre. 
+%TODO (Par soucis de légèreté du rapport nous n'exposerons pas toutes les méthodes permettant de trouver quelle solution maximise au mieux la fonction objectif.)
+
+Une façon naïve de résoudre le problème serait de lister toutes les valeurs possibles pour les variables à déterminer et de les tester une par une. Alors il suffira de voir si une valeur donnée respecte toutes les contraintes et obtient une meilleur note à la fonction objectif. Si c'est le cas, alors on gardera cette solution jusqu'à en trouver une meilleure où lorsque l'on aura testé toutes les possibilités.
+
+
+
+
+
 
 
 %=========END chap 2================
