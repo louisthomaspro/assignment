@@ -1,0 +1,8 @@
+Github https://github.com/louisthomaspro/assignment
+GLPK site https://www.gnu.org/software/glpk/
+Node js https://nodejs.org/en/
+Google sheet
+OVH https://www.ovh.com/fr/
+
+méthode hongroise 21/03/18 15h00 : https://fr.wikipedia.org/wiki/Algorithme_hongrois
+http://wiki.engageeducation.org.au/further-maths/networks-and-decision-mathematics/bipartite-graphs-and-hungarian-algoritm/

@@ -58,6 +58,8 @@ Vous découvrirez comment nous avons réparti notre charge de travail dans ce d�
 
 Nous aborderons alors comment nous avons modélisé ce problème puis avec quels outils nous avons travaillé pour arriver à un outils de saisie et de résolution des affectations.
 
+Pendant la lecture de ce rapport de projet, nous vous exposerons une méthode de résolution du problème d'affectation.
+
 %=========BEGIN chap 1=============
 \chapter{Le problème d'affectation}
 \label{chap:pb_affectation}
@@ -327,11 +329,58 @@ Pour cela, on peut ajouter des poids $\alpha, \beta$ deux nombres donnés qui pe
 \text{maximiser} \left( \alpha ValeurPrefMin + \beta \sum_{(i \in Individus)} \sum_{(p\in Projets)} affectation[i,p]\times preference[i,p] \right)
 \end{equation}
 
+
+\paragraph*{Transition:}
+Après avoir vu le fond du problème que nous avons souhaité résoudre dans ce projet, nous allons passer à notre proposition de réalisation d'un outil d'aide à l'affectation des projets.
 %=========END chap 1================
 
 
 %=========BEGIN chap 2================
-\chapter{Programmation linéaire et résolution GMPL-Mathprog}
+\chapter{Organisation et choix techniques de réalisation de l'outils d'affectation}
+
+
+
+\section{Résoudre le problème d'affectation}
+Il existe plusieurs manières de résoudre le problème d'affectation.
+Nous rappelons que le but est d'attribuer pour chaque étudiant un unique projet en maximisant la satisfaction générale.
+
+Dans un premier temps, nous avons recherché des algorithmes permettant de résoudre ce problème. Nous verrons 2 méthodes, l'une utilisant un algorithme Hongrois et l'autre utilisant un solver linéaire.
+
+\subsection{L'algorithme Hongrois, de Kuhn-Munkres}
+
+L'algorithme Hongrois permet de trouver un couplage parfait dans un graphe biparti de poids maximum (ou minimum) d'après Wikipédia.
+
+\paragraph*{Pourquoi est-ce un algorithme adapté au problème d'affectation ?}
+\subparagraph*{Un graphe biparti ? Pourquoi ?}
+Un graphe biparti un type particulier de graphe dont on distingue 2 nuages de noeuds dont les noeuds appartenant à un nuage ne peuvent être lié qu'aux noeuds de l'autre nuage par des arcs. 
+Autrement dit, il est interdit d'avoir un arc entre 2 noeuds d'un même nuage.
+
+\begin{figure}[htbp]
+\caption{\label{fig:graphe_biparti}Modélisation étudiants-projets dans un graphe biparti complet}
+\includegraphics[width=8cm]{images/Graphe_bipartie}
+\end{figure}
+
+On a une analogie directe entre les 2 nuages de noeuds du graphe, le premier nuage représente les étudiants et le second représente les projets.
+
+Chaque étudiant est lié à chaque projets par $n$ arcs pour les $n$ projets. Par exemple dans la figure \ref{fig:graphe_biparti}, on dispose de 3 étudiants ayant émis une préférence pour chaque projets. La valeur de la préférence correspond au poid sur l'arc reliant l'étudiant au projet.
+
+\subparagraph*{Un couplage parfait ? \'A quoi ça correspond ?}
+
+Un couplage parfait dans un graphe correspond à choisir des arcs dans ce graphe de façon à ce qu'il n'existe qu'un et un seul arc entre chaque noeuds.
+Dans notre cas, si on réalise un couplage parfait sur le graphe biparti, alors on aura réalisé une affectation des étudiants à un projet. 
+
+\begin{figure}[htbp]
+\caption{\label{fig:graphe_biparti_couplage_parfait}Couplages parfait sur le graphe biparti (fig. \ref{fig:graphe_biparti})}
+\includegraphics[width=12cm]{images/graphe_biparti_couplage_parfait}
+\end{figure}
+
+La figure \ref{fig:graphe_biparti_couplage_parfait} illustre ces propos en métant en évidence quelques couplages possibles à partir du graphe biparti \ref{fig:graphe_biparti}.
+
+\subsection{Résolution par un Solver Linéaire}
+%TODO parler du solver glpk et les méthodes de résolutions
+
+\section{Implémentation de la méthode de résolution}
+%TODO Expliquer comment on a programmé le GLPK ? Fichier .dat et .mod, contenu du fichier mod et fichier dat
 
 Pour mettre en application notre modèle mathématique, nous avons choisi d'utiliser le solver GLPK et d'écrire notre modèle en GMPL aussi connu sous le nom de Mathprog.
 
@@ -340,8 +389,6 @@ En effet, nous avons précédemment formalisé le modèle du problème d'affecta
 Un solver est un machine à calculer équipé d'algorithmes d'optimisation permettant de trouver la solution à un modèle mathématique qui maximise (minimise, ou se rapproche d'une valeur donné) au mieux la fonction objectif.
 
 Nous avons choisi GLPK car c'est un solver libre multi-plateforme qu'il est possible d'intégrer dans tout type d'applications à travers des librairies.
-
-\section{Une histoire d'optimisation}
 
 Tel que nous l'avons défini, le problème d'affectation est un problème d'optimisation linéaire. 
 
@@ -365,17 +412,12 @@ solutions où la matrice d'affectations aurait sur une ligne plusieurs 1 (ce qui
  
 Passons désormais à notre implémentation GMPL du problème d'affectation.
 
- \section{Notre modèle GMPL-MathProg}
-%TODO Expliquer comment on a programmé le GLPK ? Fichier .dat et .mod, contenu du fichier mod et fichier dat
-\chapter{Outil complet et sa réalisation}
-
-\section{\'Eléments de gestion de projet}
-
+\section{Saisie et visualisation}
+%TODO Comment programme google sheet, les outils utilisés pour tester, POSTMAN, node, serveur ovh...
+\section{Organisation Front et Back end}
 %TODO Diagramme SYSML pour l'organisation du projet
 %TODO Images des outils utilisés, GLPK, Google Sheets ,Node, Javascript, parsers java, python et Javascript...
 
-\section{Outil de saisie Google Sheet}
-%TODO Comment programme google sheet, les outils utilisés pour tester, POSTMAN, node, serveur ovh...
 %=========END chap 2================
 
 \end{document}
