@@ -5,44 +5,13 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-const jwt = require('express-jwt');
-const jwks = require('jwks-rsa');
-var rsaValidation = require('auth0-api-jwt-rsa-validation');
 
 var cors = require('cors');
 
 var index = require('./routes/index');
-var users = require('./routes/users');
-var tasks = require('./routes/tasks');
-var solver = require('./routes/solver');
 var assign = require('./routes/assign');
 
-var list = require('./routes/list');
-
 var app = express();
-
-
-
-var jwtCheck = jwt({
-    secret: jwks.expressJwtSecret({
-        cache: true,
-        rateLimit: true,
-        jwksRequestsPerMinute: 5,
-        jwksUri: "https://ltpro.eu.auth0.com/.well-known/jwks.json"
-    }),
-    audience: 'https://easy-assignment.com',
-    issuer: "https://ltpro.eu.auth0.com/",
-    algorithms: ['RS256']
-});
-
-
-// app.use(jwtCheck);
-//
-// app.use(function (err, req, res, next) {
-//   if (err.name === 'UnauthorizedError') {
-//     res.status(401).json({message:'Missing or invalid token'});
-//   }
-// });
 
 
 // view engine setup
@@ -59,10 +28,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
-app.use('/users', users);
-app.use('/tasks', tasks);
-app.use('/solver', solver);
-app.use('/list', list);
 app.use('/assign', assign);
 
 // catch 404 and forward to error handler
