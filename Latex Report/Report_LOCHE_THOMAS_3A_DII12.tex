@@ -92,7 +92,7 @@ Pour cela on commence par créer deux entités appartenant à deux ensembles qui
 \item une entité  $projet \in Projets$ : représente un projet auquel sera affecté un \textbf{individu}.
 \end{enumerate}
 
-Pour plus de simplicité, on va indicer les entités comme dans le tableau \ref{tab:indice_entite_mod_math}. On a choisi que les binômes seront représentés par des individus.
+Pour plus de simplicité, on va indicer les entités comme dans \autoref{tab:indice_entite_mod_math}. On a choisi que les binômes seront représentés par des individus.
 \begin{table}
 \caption{\label{tab:indice_entite_mod_math}Indiçage des entités du modèle mathématique}
 \begin{tabular}{|c|c|c|c|}
@@ -215,7 +215,7 @@ $$
 $$
 
 \paragraph{Problème} Cette contrainte est très restrictive sur les solutions. Il se peut même $ValeurPrefMin$ de manière trop audacieuse et que le problème soit insoluble avec ces paramètres.
-Prenons un exemple de l'affectation de 4 individus et 4 projets (Cf. tableau:\ref{tab:preference_exemple}).
+Prenons un exemple de l'affectation de 4 individus et 4 projets (Cf. \autoref{tab:preference_exemple}).
 
 \begin{table}
 \caption{\label{tab:preference_exemple}Données de préférence pour l'exemple}
@@ -360,55 +360,160 @@ Autrement dit, il est interdit d'avoir un arc entre 2 noeuds d'un même nuage.
 
 On a une analogie directe entre les 2 nuages de noeuds du graphe, le premier nuage représente les étudiants et le second représente les projets.
 
-Chaque étudiant est lié à chaque projets par $n$ arcs pour les $n$ projets. Par exemple dans la figure \ref{fig:graphe_biparti}, on dispose de 3 étudiants ayant émis une préférence pour chaque projets. La valeur de la préférence correspond au poid sur l'arc reliant l'étudiant au projet.
+Chaque étudiant est lié à chaque projets par $n$ arcs pour les $n$ projets. Par exemple dans la \autoref{fig:graphe_biparti}, on dispose de 3 étudiants ayant émis une préférence pour chaque projets. La valeur de la préférence correspond au poid sur l'arc reliant l'étudiant au projet.
 
-\subparagraph{Un couplage parfait ? \'A quoi ça correspond ?}
+\subparagraph{Un couplage parfait ? \`A quoi ça correspond ?}
 
 Un couplage parfait dans un graphe correspond à choisir des arcs dans ce graphe de façon à ce qu'il n'existe qu'un et un seul arc entre chaque noeuds.
 Dans notre cas, si on réalise un couplage parfait sur le graphe biparti, alors on aura réalisé une affectation des étudiants à un projet. 
 
 \begin{figure}[htbp]
 \includegraphics[width=12cm]{images/graphe_biparti_couplage_parfait}
-\caption{\label{fig:graphe_biparti_couplage_parfait}Couplages parfait sur le graphe biparti (fig. \ref{fig:graphe_biparti})}
+\caption{\label{fig:graphe_biparti_couplage_parfait}Couplages parfait sur le graphe biparti (\autoref{fig:graphe_biparti})}
 \end{figure}
 
-La figure \ref{fig:graphe_biparti_couplage_parfait} illustre ces propos en métant en évidence quelques couplages possibles à partir du graphe biparti \ref{fig:graphe_biparti}.
+La \autoref{fig:graphe_biparti_couplage_parfait} illustre ces propos en mettant en évidence quelques couplages possibles à partir du graphe biparti (\autoref{fig:graphe_biparti}).
+
+La méthode hongroise de résolution permet alors de trouver le couplage parfait maximisant (ou minimisant) la somme des poids de tous les arcs du couplage.
+
+Pour nous, cela correspond à trouver les affectations qui satisfont tout le monde ! 
+
+Nous ne rentrerons pas dans les détails de l'implémentation de l'algorithme hongrois car ce n'est pas la solution que nous avons retenu pour effectuer nos calculs d'affectation. 
+
+Nous l'avons toutefois testé lors du démarrage du projet en déroulant l'algorithme à la main sur un petit jeu de données et en utilisant une \textit{librairie Munkres} implémentant la méthode hongroise sur \textit{python} et \textit{JavaScript}.
+
+De la littérature très bien écrite est disponible sur Internet avec notamment: TODO AJOUTER LES REFERENCES
+%TODO
+
+Nous nous sommes rapidement tourné vers l'optimisation par programmation linéaire plus flexible en termes de contraintes pour la résolution des problèmes et pour laquelle il existe de très puissants algorithmes implémentés dans des logiciels optimisés.
+
+En effet, si résoudre le problème d'affectation comme le fait la méthode hongroise revient à résoudre le problème linéaire que nous avons définit au \autoref{chap:pb_affectation}.
+
+La seule différence est que seules les contraintes \autoref{eqn:nb_indiv_proj} et \autoref{eqn:nb_proj_indiv} sur le nombre de projets par étudiants et le nombre d'étudiants par projet est fixé à $1$ pour que la méthode hongroise soit applicable.
+De même la fonction objectif de ce problème sera forcément \autoref{eqn:maximize_preference}. La compléxité de cet algorithme est comprise entre \textbf{O($n^3$)} et  \textbf{O($n^4$)}, c'est à dire qu'elle s'exécute en un temps proportionnel au polynôme $n^3$ ou $n^4$ avec $n$ la dimension de la matrice \textit{affectation} à déterminer.
+
+Le besoin de changer de méthode résolution et la nécessité de passer à la programmation linéaire est apparu lorsque nous avons commencé a ajouter des contraintes à notre modèle.
+
+Nous allons voir désormais comment l'optimisation linéaire permet de résoudre le problème.
 
 \subsection{Résolution par un Solver Linéaire}
-%TODO parler du solver glpk et les méthodes de résolutions
+%TODO parler du solver glpk et les méthodes de résolutions.
+
+Pour résoudre le problème d'affectation, après avoir testé la méthode Hongroise, nous avons découvert le solver GLPK qui permet de résoudre les problèmes d'optimisation linéaire.
+
+Un \textbf{solver linéaire}  est un machine à calculer équipé d'algorithmes d'optimisation permettant de trouver la solution à un modèle mathématique qui maximise (minimise, ou se rapproche d'une valeur donné) au mieux la fonction objectif qui est combinaison linéaire des variables à déterminer.
+
+Tel que nous l'avons défini, le problème d'affectation est \textbf{un problème d'optimisation linéaire}. 
+
+Ce qui peut rendre la résolution du problème compliqué est le fait que les \textbf{variables de décision}, dans notre cas les \textit{affectations} doivent être des nombres entiers. En effet, un étudiant ne peux pas être affecté à 0,5 projet.
+
+Comme il s'agit d'un problème dont les solutions sont des nombres entiers, nous avons utilisé la programmation linéaire en nombre entiers (PLNE) pour le résoudre. 
+
+Un problème de programmation linéaire en nombre entiers est construit de la même façon que dans le \autoref{chap:pb_affectation}. 
+
+Il faut fournit un jeu de \textbf{paramètres} au problème, \textbf{variables} de décisions, \textbf{contraintes} et enfin une \textbf{fonction objectif}.
+
+%TODO (Par soucis de légèreté du rapport nous n'exposerons pas toutes les méthodes permettant de trouver quelle solution maximise au mieux la fonction objectif.)
+
+Une façon naïve de résoudre le problème serait de procéder par itération en listant toutes les valeurs possibles des variables à déterminer et de les tester une par une. 
+
+Alors il suffira de voir si une valeur donnée respecte toutes les contraintes et obtient une meilleur note à la fonction objectif.
+
+ Si c'est le cas, alors on gardera cette solution jusqu'à en trouver une meilleure où lorsque l'on aura testé toutes les possibilités.
+
+Il y a un gros problème de performances avec cette méthode, car pour notre problème, la matrice des \textit{affectations} a une taille de $nbProjets\times nbIndividus$ et ne contient que des 0 et des 1.
+
+Un calcul rapide nous permet de dire qu'il existe $2^{nbProjets\times nbIndividus}$ combinaisons de la matrice \textit{affectations}.
+En prend $nbProjets=nbIndividus=n$, c'est à dire autant d'élèves que de projets.
+
+La complexité de cette recherche de la meilleure solution est de \textbf{O($2^{(n^2)}$)}, ce qui est vraiment mauvais même pour de très petit échantillons. Le temps de résolution sera exponentiel en fonction de la taille des données d'entrée.
+
+\begin{equation}
+n=4
+\left(
+\begin{array}{cccc}
+1 & 1 & 1 & 0 \\ 
+0 & 1 & 0 & 1 \\ 
+0 & 1 & 1 & 1 \\ 
+1 & 1 & 1 & 0
+\end{array} 
+\right)
+\text{Exemple de matrice pour affectation}
+\end{equation}
+
+Parmi les valeurs possible de la matrice d'affectations, nombreuses sont celles qui ne respecteront pas la contraintes d'un projet par étudiants ni même la contraintes d'un projet par étudiants. 
+
+C'est a dire qu'il n'existe qu'au mieux 1 seul 1 sur chaque ligne et chaque colonne de la matrice.
+
+On pourrait donc se servir de ces informations pour discriminer certaines des valeurs de la matrice \textit{affectations}.
+
+Pour une matrice de taille $n\times n$, on ne peut construire qu'un dictionnaire de $n!$ matrices potentiellement solution du problème d'affectation. 
+
+\begin{equation}
+\left.
+n=4
+\begin{array}{cc}
+\left(
+\begin{array}{cccc}
+1 & 0 & 0 & 0 \\ 
+0 & 0 & 0 & 1 \\ 
+0 & 1 & 0 & 0 \\ 
+0 & 0 & 1 & 0
+\end{array} 
+\right)
+&
+\begin{array}{l}
+\leftarrow 4=n \text{  positions dispo.}\\ 
+\leftarrow 3=n-1 \text{  positions dispo.} \\ 
+\leftarrow 2=n-2 \text{  positions dispo.}\\ 
+\leftarrow 1=n-3 \text{  positions dispo.}
+\end{array} 
+\end{array}
+\right\rbrace
+n! \text{ matrices possibles}
+\end{equation}
+
+On peut désormais baser notre recherche itérative sur ces $n!$ matrices de la variable \textit{affectation}. La complexité de la recherche est désormais de  \textbf{O($n!$)}. Par exemple pour une matrice $4\times 4$ , une recherche itérative simple en testant toutes les combinaison amènerai à rechercher parmi $2^{4\times 4} = 2^{16}=65535$ matrices alors qu'après la discrimination des matrices ne pouvant pas être solutions, on a plus que $4!=24$ matrices à tester. 
+
+Cette méthode est moins efficace que l'algorithme Hongrois qui s'exécute en \textbf{O($n^4$)} au pire.
+
+Cependant cette première optimisation de la recherche de la meilleure affectation fait parti d'un des nombreux mécanismes d'optimisation utilisés par le solver.
+
+Cet exemple était là pour illustrer la façon avec laquelle on peut rechercher la solution au problème en fonction d'un modèle donné.
+
+Cependant, un solver est complexe et nous n'avons pas passé en revue toutes les méthodes d'optimisation pour notre problème.
+
+Par la suite, nous vous présenterons le solver utilisé qui est GLPK, un solver linéaire avec des méthodes de résolution efficaces même pour de larges volumes de données.
 
 \section{Implémentation de la méthode de résolution}
 %TODO Expliquer comment on a programmé le GLPK ? Fichier .dat et .mod, contenu du fichier mod et fichier dat
 
-Pour mettre en application notre modèle mathématique, nous avons choisi d'utiliser le solver GLPK et d'écrire notre modèle en GMPL aussi connu sous le nom de Mathprog.
+Pour mettre en application notre modèle mathématique, nous avons choisi d'utiliser le solver linéaire \textbf{GLPK} et d'écrire notre modèle en \textbf{GMPL} aussi connu sous le nom de \textbf{Mathprog}.
 
 En effet, nous avons précédemment formalisé le modèle du problème d'affectation et il ne reste plus qu'à le traduire en langage informatique pour qu'un solver trouve une solution optimisée qui respecte toutes les contraintes.
 
-Un solver est un machine à calculer équipé d'algorithmes d'optimisation permettant de trouver la solution à un modèle mathématique qui maximise (minimise, ou se rapproche d'une valeur donné) au mieux la fonction objectif.
+Nous avons choisi GLPK car c'est un solver linéaire libre multi-plateforme qu'il est possible d'intégrer dans tout type d'applications à travers des librairies. L'avantage premier étant est qu'il est adapté à la résolution de notre problème linéaire.
 
-Nous avons choisi GLPK car c'est un solver libre multi-plateforme qu'il est possible d'intégrer dans tout type d'applications à travers des librairies.
-
-Tel que nous l'avons défini, le problème d'affectation est un problème d'optimisation linéaire. 
-
-Ce qui peut rendre la résolution du problème compliqué est le fait que les variables de décision, dans notre cas les \textit{affectations} doivent être des nombres entiers. En effet, un étudiant ne peux pas être affecté à 0,5 projet.
-
-Le problème d'affectation peut être résolu par GLPK car il s'agit d'un problème linéaire. Les données à déterminer ne sont que des combinaisons linéaires les unes des autres. Comme il s'agit d'un problème dont les solutions sont des nombres entiers, nous avons utilisé la programmation linéaire en nombre entiers (PLNE) pour le résoudre. 
-
-Alors il existe des méthodes de résolution efficaces de résolution. 
-%TODO (Par soucis de légèreté du rapport nous n'exposerons pas toutes les méthodes permettant de trouver quelle solution maximise au mieux la fonction objectif.)
-
-Une façon naïve de résoudre le problème serait de lister toutes les valeurs possibles pour les variables à déterminer et de les tester une par une. Alors il suffira de voir si une valeur donnée respecte toutes les contraintes et obtient une meilleur note à la fonction objectif. Si c'est le cas, alors on gardera cette solution jusqu'à en trouver une meilleure où lorsque l'on aura testé toutes les possibilités.
-
-Lors de ce projet, nous n'avons pas fait le tour de toutes les méthodes d'optimisations utlisées par les solver, nous avons surtout cherché à comprendre comment utiliser le solver et le langage GMPL pour l'utiliser à la résolution de notre problème.
-
-Cependant, pour dire quelques mots sur les méthodes d'optimisations, le solver est capable de limiter le nombre d'itérations et le nombre de tests à faire pour trouver une solution optimisée problème.
-
-En effet, en fonction du jeu de contraintes que l'on fournit dans le modèle mathématique, le solver va appliquer un algorithme discriminant certaines valeurs des variables de décision.
- Par exemple, dans notre cas, la contrainte imposant qu'un étudiant ne doit être affecté qu'à un seul projet permet au solver d'éliminer les
-solutions où la matrice d'affectations aurait sur une ligne plusieurs 1 (ce qui signifie qu'un étudiant serait affecté à plusieurs projets).
- On peut éliminer ainsi un bon nombre de valeurs et n'en tester qu'une portion restreinte.
+Lors de ce projet, nous n'avons pas fait le tour de toutes les méthodes d'optimisations utilisées par les solver, nous avons surtout cherché à comprendre comment utiliser le solver et le langage GMPL pour l'utiliser à la résolution de notre problème.
  
-Passons désormais à notre implémentation GMPL du problème d'affectation.
+Le langage GMPL est un langage de programmation linéaire haut niveau permettant de mettre en forme un modèle mathématique très facilement pour qu'il soit résolu par le solver GLPK.
+
+Ce langage a été pensé pour être très proche du formalisme mathématique.
+
+Il est possible avec GLPK de séparer données et modèle mathématique. 
+
+En effet, on peut disposer d'un fichier \textbf{[Mon\_Modèle].mod} et lui associer des données \textbf{[Mes\_Données].dat}.
+
+On peut ensuite appeler GLPK simplement via la commande:
+\begin{center}
+\textbf{glpsol -m \textit{[Mon\_Modèle]}.mod -d \textit{[Mes\_Données1]}.dat -d \textit{[Mes\_Données2]}.dat}
+\end{center}
+
+Vous trouverez en annexe  l'implémentation du modèle mathématique. TODO:RAJOUTER LE LIEN DU CODE GMPL assign.mod
+%TODO
+
+GLPK est disponible en librairie portable à cette adresse TODO AJOUTER LE LIEN GLPK online
+%TODO
 
 \section{Saisie et visualisation}
 %TODO Comment programme google sheet, les outils utilisés pour tester, POSTMAN, node, serveur ovh...
