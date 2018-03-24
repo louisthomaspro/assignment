@@ -1,7 +1,7 @@
 \documentclass{polytech/polytech}
 \usepackage{amsmath}
 % zone du préambule
-
+\SetKw{Break}{break}
 
 
 \typereport{custom}
@@ -41,7 +41,7 @@
 
 \addbibresource{biblio}
 
-\SetKw{Break}{break}
+
 
 \begin{document}
 % zone du contenu du document
@@ -83,6 +83,7 @@ Le fait de formaliser un problème en langage mathématique nous permettra de de
 Pour cela, il faut définir quels sont les \textbf{paramètres}\footnote{Dans un modèle mathématique, un paramètre est une donnée.}, les \textbf{ variables}\footnote{Dans un modèle mathématique, une variable est une valeur calculée, une inconnue.}, les \textbf{contraintes}\footnote{Les contraintes représentent les règles à respecter lors de la résolution du problème.}, et la \textbf{fonction objectif}\footnote{C'est l'ultime but à atteindre pour établir que la solution au problème est optimale.} de notre problème.
 
 Commençons par définir nos données c'est à dire les paramètres de notre modèle.
+
 \subsection{Les données et les paramètres}
 \label{sec:donnees_params}
 Pour cela on commence par créer deux entités appartenant à deux ensembles qui seront nos données de départ:
@@ -93,8 +94,7 @@ Pour cela on commence par créer deux entités appartenant à deux ensembles qui
 
 Pour plus de simplicité, on va indicer les entités comme dans le tableau \ref{tab:indice_entite_mod_math}. On a choisi que les binômes seront représentés par des individus.
 \begin{table}
-\caption{Indiçage des entités du modèle mathématique}
-\label{tab:indice_entite_mod_math}
+\caption{\label{tab:indice_entite_mod_math}Indiçage des entités du modèle mathématique}
 \begin{tabular}{|c|c|c|c|}
 \hline
 \multicolumn{2}{|c|}{$\forall individu \in Individus$} & \multicolumn{2}{|c|}{$\forall projet \in Projets$} \\
@@ -218,8 +218,7 @@ $$
 Prenons un exemple de l'affectation de 4 individus et 4 projets (Cf. tableau:\ref{tab:preference_exemple}).
 
 \begin{table}
-\caption{Données de préférence pour l'exemple}
-\label{tab:preference_exemple}
+\caption{\label{tab:preference_exemple}Données de préférence pour l'exemple}
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 préférence[individu,projet] & Projet 1 & Projet 2 & Projet 3 & Projet 4 \\
@@ -250,8 +249,8 @@ Elle renvoie une structure $ResultSolver$ contenant les résultats de la résolu
 
 On l'utilise donc pour savoir si on a réussi a résoudre le
 \begin{algorithm}
-\caption{Résolution du modèle avec $ValeurPrefMin$ choisi par tentative}
-\label{chap:problem_affectation:algo:recherche_tatonnement}
+\caption{\label{chap:problem_affectation:algo:recherche_tatonnement}Résolution du modèle avec $ValeurPrefMin$ choisi par tentative}
+
 \tcc{Init variable résultat du solver, contient $ResultSolver.data$ et $ResultSolver.state$}
 $ResultSolver \gets Null$ \\
 
@@ -281,9 +280,6 @@ Cette méthode n'a pas la meilleur complexité et peut considérablement allonge
 
 \subparagraph{Recherche de $ValeurPrefMin$ dichotomique}
 \begin{algorithm}
-\caption{Recherche de $ValeurPrefMin$ dichotomique}
-\label{chap:problem_affectation:algo:recherche_dichotomique}
-
 \tcc{Init variable résultat du solver, contient $ResultSolver.data$ et $ResultSolver.state$}
 $ResultSolverFinal \gets Null$ \\
 $deb \gets 1$ \\
@@ -306,6 +302,7 @@ $mil \gets \frac{deb+fin}{2}$ \\
 }
 
 \Return{$ResultSolverFinal$}
+\caption{\label{chap:problem_affectation:algo:recherche_dichotomique}Recherche de $ValeurPrefMin$ dichotomique}
 \end{algorithm}
 \paragraph{Solution 2}
 On change la nature de $ValeurPrefMin$ et elle devient donc une \textbf{variable} intervenant dans la fonction objectif.
@@ -330,7 +327,7 @@ Pour cela, on peut ajouter des poids $\alpha, \beta$ deux nombres donnés qui pe
 \end{equation}
 
 
-\paragraph*{Transition:}
+\paragraph{Transition:}
 Après avoir vu le fond du problème que nous avons souhaité résoudre dans ce projet, nous allons passer à notre proposition de réalisation d'un outil d'aide à l'affectation des projets.
 %=========END chap 1================
 
@@ -350,28 +347,29 @@ Dans un premier temps, nous avons recherché des algorithmes permettant de réso
 
 L'algorithme Hongrois permet de trouver un couplage parfait dans un graphe biparti de poids maximum (ou minimum) d'après Wikipédia.
 
-\paragraph*{Pourquoi est-ce un algorithme adapté au problème d'affectation ?}
-\subparagraph*{Un graphe biparti ? Pourquoi ?}
+\paragraph{Pourquoi est-ce un algorithme adapté au problème d'affectation ?}
+
+\subparagraph{Un graphe biparti ? Pourquoi ?}
 Un graphe biparti un type particulier de graphe dont on distingue 2 nuages de noeuds dont les noeuds appartenant à un nuage ne peuvent être lié qu'aux noeuds de l'autre nuage par des arcs. 
 Autrement dit, il est interdit d'avoir un arc entre 2 noeuds d'un même nuage.
 
 \begin{figure}[htbp]
-\caption{\label{fig:graphe_biparti}Modélisation étudiants-projets dans un graphe biparti complet}
 \includegraphics[width=8cm]{images/Graphe_bipartie}
+\caption{\label{fig:graphe_biparti}Modélisation étudiants-projets dans un graphe biparti complet}
 \end{figure}
 
 On a une analogie directe entre les 2 nuages de noeuds du graphe, le premier nuage représente les étudiants et le second représente les projets.
 
 Chaque étudiant est lié à chaque projets par $n$ arcs pour les $n$ projets. Par exemple dans la figure \ref{fig:graphe_biparti}, on dispose de 3 étudiants ayant émis une préférence pour chaque projets. La valeur de la préférence correspond au poid sur l'arc reliant l'étudiant au projet.
 
-\subparagraph*{Un couplage parfait ? \'A quoi ça correspond ?}
+\subparagraph{Un couplage parfait ? \'A quoi ça correspond ?}
 
 Un couplage parfait dans un graphe correspond à choisir des arcs dans ce graphe de façon à ce qu'il n'existe qu'un et un seul arc entre chaque noeuds.
 Dans notre cas, si on réalise un couplage parfait sur le graphe biparti, alors on aura réalisé une affectation des étudiants à un projet. 
 
 \begin{figure}[htbp]
-\caption{\label{fig:graphe_biparti_couplage_parfait}Couplages parfait sur le graphe biparti (fig. \ref{fig:graphe_biparti})}
 \includegraphics[width=12cm]{images/graphe_biparti_couplage_parfait}
+\caption{\label{fig:graphe_biparti_couplage_parfait}Couplages parfait sur le graphe biparti (fig. \ref{fig:graphe_biparti})}
 \end{figure}
 
 La figure \ref{fig:graphe_biparti_couplage_parfait} illustre ces propos en métant en évidence quelques couplages possibles à partir du graphe biparti \ref{fig:graphe_biparti}.
