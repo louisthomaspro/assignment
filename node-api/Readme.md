@@ -5,47 +5,19 @@
 ### Require
 
  - NodeJS - [https://nodejs.org/en/](https://nodejs.org/en/)
- - MySQL database - [http://wampserver.com/](http://www.wampserver.com/) (exemple)
  - Postman - [https://www.getpostman.com/](https://www.getpostman.com/) (optional)
 
 
 ### Steps
 
-1. Clone project
+1. Clone project (https://github.com/louisthomaspro/assignment.git)
 
-2. Configure database in *dbconnection.js* file and load the table exemple *task.sql*
+2. Open console in "node-api" folder. Type >`npm install` to install dependencies and then >`node app` to start the app at [http://localhost:8080/](http://localhost:8080/)
 
-3. Open console in your project folder. Type >`npm install` to install **dependencies** and then >`node app` to **start** the app at [http://localhost:8080/](http://localhost:8080/)
-
-4. In the Postman header, don't forget the Auth0 token `authorization: 'Bearer {{token}}'`. To get the token, create *tokenclient.js* file in root folder and copy/paste your client information on [https://auth0.com/](https://auth0.com/) > API > assignment API > Test > Select language <kbd>jQuery</kbd>. The file should be like :
-	```javascript
-	var settings = {
-		"async": true,
-		"crossDomain": true,
-		"url": "***",
-		"method": "POST",
-		"headers": {
-		"content-type": "application/json"
-	},
-		"data": "{\"client_id\":\"***\",\"client_secret\":\"***\",\"audience\":\"***",\"grant_type\":\"client_credentials\"}"
-	}
-
-	$.ajax(settings).done(function (response) {
-		console.log(response);
-	});
-	```
-	Now open *token.html* and get your token... (allow **Access-Control-Allow-Origin** to get the token)
-
-
-### API
-
-create list : post(/list/create) +mail(exemple@gmail.com) +url(http://localhost:4200/list/list_hash/user_hash)
-
-
-### Sources
-
- - Secure backend API - [https://scotch.io/tutorials/building-and-securing-a-modern-backend-api](https://scotch.io/tutorials/building-and-securing-a-modern-backend-api)
- - Angular + API - [https://medium.com/craft-academy/connecting-an-api-to-an-angular-4-front-end-application-e0fc9ea33202](https://medium.com/craft-academy/connecting-an-api-to-an-angular-4-front-end-application-e0fc9ea33202)
- - Angular - [https://angular.io/docs](https://angular.io/docs)
-
-npm install https://git@github.com/hgourvest/glpk.js.git
+3. You can use Postman to test the API. In the Postman header, put `Content-Type : application/x-www-form-urlencoded`. In body, set parameters.
+For exemple :
+```javascript
+params : {"nbStudents":10,"nbProjects":13,"maxStudentsPerProjects":1,"minStudentsPerProjects":0,"ProjectsPerStudents":1}
+array : [[7,1,8,4,12,13,11,2,10,9,3,5,6],[5,1,3,13,4,6,7,12,11,2,8,9,10],[6,7,5,4,3,2,8,1,9,10,11,12,13],[11,13,3,7,12,9,4,5,8,2,6,1,10],[13,1,3,10,5,2,9,6,12,11,7,4,8],[10,2,4,9,3,8,11,1,7,6,13,5,12],[5,2,12,1,6,13,10,4,7,9,3,11,8],[9,2,4,12,8,13,1,7,5,6,10,3,11],[13,1,12,2,4,11,3,10,5,7,8,9,6],[2,1,6,3,7,8,13,4,9,10,11,12,5]]
+priority : [["","","","","","","","","","","","",""]]
+```
