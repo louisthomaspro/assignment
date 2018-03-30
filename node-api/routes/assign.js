@@ -88,7 +88,6 @@ router.post('/',function(req,res,next){
   'param nbStudents :='+params.nbStudents+';\n'+
   'param nbProjects :='+params.nbProjects+ ';\n'+
   'param maxStudentsPerProjects :='+params.maxStudentsPerProjects+ ';\n'+
-  'param minStudentsPerProjects :='+params.minStudentsPerProjects+ ';\n'+
   'param ProjectsPerStudents :='+params.ProjectsPerStudents+ ';\n';
 
   // Generate wish table parameters

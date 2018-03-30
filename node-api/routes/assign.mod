@@ -23,7 +23,7 @@ param nbProjects, integer, > 0;
 
 param maxStudentsPerProjects, integer, >0;
 
-param minStudentsPerProjects, integer, >=0;
+/* param minStudentsPerProjects, integer, >=0; */
 
 param ProjectsPerStudents, integer, >=0;
 
