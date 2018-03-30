@@ -156,8 +156,11 @@ router.post('/',function(req,res,next){
     response = mathprog(model);
     console.log(response);
   }
-  catch(error) {
-    console.log(error);
+  catch(err) {
+    var r = { error: true, result: err.message };
+    console.log(r);
+    res.json(r);
+    return 0;
   }
 
   // response : [[0],[1],[0],[0],[0],[0],[1],[0],[0],[0],[1],[0],[0],[0],[0],[0],[0],[0],[0],[1],[0],[0],[0],[0],[1],[0],[1],[0],[0],[0],[0],[0],[0],[1],[0],[0],[0],[0],[1],[0],[0],[0],[1],[0],[0],[1],[0],[0],[0],[0],[0],[0],[1],[0],[0],[0],[0],[0],[0],[1],[4],[0]]
@@ -176,10 +179,12 @@ router.post('/',function(req,res,next){
   } else {
     console.error("Error : empty result");
   }
-  console.log(results);
 
   // return results
-  res.json(results);
+  var r = { error: false, result: results };
+  console.log(r);
+  res.json(r);
+  return 0;
 });
 
 module.exports = router;
