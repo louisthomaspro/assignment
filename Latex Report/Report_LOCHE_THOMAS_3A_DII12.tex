@@ -515,9 +515,84 @@ Vous trouverez en annexe  l'implémentation du modèle mathématique. TODO:RAJOU
 GLPK est disponible en librairie portable à cette adresse TODO AJOUTER LE LIEN GLPK online
 %TODO
 
-\section{Saisie et visualisation}
+\section{Interface de saisie des données et création d'un back-end}
+Dans cette partie du rapport, nous allons voir notre proposition en terme d'interface de saisie des préférences accompagnant notre modèle de résolution.
+
+\subsection{Les choix et les objectifs}
+Nous avons fait une étude sur les différentes possibilité de saisie (Excel, Google sheets, Celene, interface JAVA, console...).
+Après avoir pesé les pour et les contres, nous nous sommes tourné vers \textbf{Google sheets} : une application web (un tableur similaire au logiciel excel Microsoft) faisant partie de la suite de google.
+Une solution modulable permettant la saisie des voeux et des paramètres grâce à :
+\begin{enumerate}
+\item une mise en forme \textbf{flexible} et \textbf{évolutive}: l'outil tableur est très puissant;
+\item une saisie \textbf{efficace} et \textbf{collaborative}: plusieurs étudiants peuvent modifier le tableur en même temps;
+\item une mise en forme \textbf{intuitive} : affichage de notification et formulaire;
+\item une accessibilité \textbf{simple} : un produit accessible gratuitement, via un lien et modifiable directement sans avoir besoin d'être connecté. Aucune installation n’est requise;
+\item un langage de programmation \textbf{intuitif} : javascript;
+\item un \textbf{support actif} avec documentation \textbf{soignée};
+\item une total \textbf{liberté de communication} : appel d’api, lecture de fichiers, communication direct avec des pages html, création de modules.
+\end{enumerate}
+
+À propos de la résolution, nous avons fait le choix d’utiliser la librairie \textbf{GLPK} disponible dans plusieurs langage de programmation dont javascript. 
+
+Avec des compétences en javascript et en connaissant le domaine des APIs, nous avons fait le choix de faire communiquer Google Sheets (l’interface de saisie) avec un serveur NodeJS qui comporte le framework \textbf{Express} utilisé en temps qu’API (Interface de Programmation Applicative\footnote{Une API est un logiciel utilisé pour résoudre un problème donné où répondre à un service permettant aux dévéloppeurs de ne pas se soucier de son implémentation.}).
+ Ceci nous a mené à une  infrastructure d’application simple, moderne et puissante chargée de traiter les données envoyées par Google sheets.
+L’avantage principal de l’API est le fait qu’elle peut être réutilisée pour d’autres projets. 
+Par exemple, si une application mobile est créé pour résoudre le problème d’affectation, celle-ci pourra communiquer avec l’API.
+En lui envoyant le bon format de donnée, celle-ci lui répondra avec les affectations. 
+
+En effet, Google Sheets a une interface de développement appelé “Google Script” permettant d’effectuer des algorithmes en javascript.
+C'est avec ce service que nous faisons appel à notre API.
+
+La contrainte est que Google sheets ne communique pas avec des API local. Nous avons donc procéder à l'hébergement de cette application sur un domaine réservé : “testing-app.ovh/assign” et un serveur vps (serveur privé virtuel\footnote{Un VPS est une des nombreuses machine virtuelle hébergé sur une machine hôte puissante permettant d'avoir plusieurs serveurs sur une machine physique.}).
+
+Cette api génère les données du modèle mathématique et les lie au \textbf{langage GMPL} (MathProg) en utilise une librairies intégrée GLPK pour le résoudre. 
+La réponse est renvoyée en JSON à Google Sheets qui lui, se charge de l’afficher.
+
+On peut résumer le fonctionnement global de notre logiciel à travers \autoref{fig:architecture_appli}.
+
+\begin{figure}[htbp]
+\includegraphics[width=15cm]{images/architecture_appli}
+\caption{\label{fig:architecture_appli} Architecture de l'application de résolution des affectations}
+\end{figure}
+
+Sans plus attendre, nous allons entrer dans le vif du sujet et vous présenter l'interface que nous proposons.
+
+\subsection{Réalisation de l'interface de saisie}
+
+\begin{figure}
+\includegraphics[width=15cm]{images/interface_appli_globale}
+\caption{\label{fig:appli_interface_globale} Interface globale de l'application}
+\end{figure}
+
+La \autoref{fig:appli_interface_globale} présente l'interface de l'application dans sa globalité.
+Elle dispose d'un tableau permettant à chaque élève/binôme ou groupe de pouvoir donner leurs voeux en fonction des projets (Cf. \autoref{fig:interface_preference}). Les voeux vont de 1 (le plus fort) jusqu’au nombre de projets.
+
+\begin{figure}
+\includegraphics[width=15cm]{images/interface_preferences}
+\caption{\label{fig:interface_preference}Tableau de saisie des préférences}
+\end{figure}
+
+Nous avons cherché a produire une interface simple et minimaliste.
+
+L’utilisateur pourra également configurer les paramètres d'affectation affichés en vert (Cf. \autoref{fig:interface_parametres}):
+\begin{enumerate}
+\item Nombre max d’étudiant par projets
+\item Nombre de projets par étudiants
+\end{enumerate}
+
+\begin{figure}
+\includegraphics[width=12cm]{images/interface_parametres}
+\caption{\label{fig:interface_parametres} Saisies des paramètres d'affectation}
+\end{figure}
+
+
+
+\subsection{Les améliorations}
+
+
+%\section{Saisie et visualisation}
 %TODO Comment programme google sheet, les outils utilisés pour tester, POSTMAN, node, serveur ovh...
-\section{Organisation Front et Back end}
+%\section{Organisation Front et Back end}
 %TODO Diagramme SYSML pour l'organisation du projet
 %TODO Images des outils utilisés, GLPK, Google Sheets ,Node, Javascript, parsers java, python et Javascript...
 
