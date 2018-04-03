@@ -1,5 +1,9 @@
-\documentclass{polytech/polytech}
+\documentclass[final,poster]{polytech/polytech}
 \usepackage{amsmath}
+\usepackage{primargs}
+\usepackage{morewrites}
+
+
 % zone du préambule
 \SetKw{Break}{break}
 
@@ -19,36 +23,51 @@
 
 \motcle{affectation}
 \motcle{solver}
+\motcle{linéaire}
+\motcle{recherche opérationnelle}
+\motcle{optimisation}
 \motcle{modèle}
 \motcle{mathématique}
-\motcle{google}
-\motcle{sheet}
-\resume{Ce projet a pour but de fournir un outil d'aide a l'affectation des projets.}
+\motcle{Google}
+\motcle{Sheets}
+\resume{Ce projet, vous présente une approche de la résolution du problème d'affectation des projets étudiants par l'optimisation linéaire. Vous découvrirez la programmation linéaire ainsi qu'une modélisation mathématique du problème et sa résolution à l'aide du solver linéaire GLPK. Vous comprendrez comment il est possible de modéliser le problème pour maximiser la satisfaction des étudiants et notre démarche dans la création d'un outil de saisie intuitif pour aider à résoudre vos problèmes d'affectations.}
 
-\keyword{example}
-\keyword{\LaTeX}
-\abstract{This is an example of an abstract for the report.}
+\keyword{assignement}
+\keyword{solver}
+\keyword{linear}
+\keyword{optimisation}
+\keyword{Google}
+\keyword{Sheets}
+\abstract{This project is all about finding the best suitable solution to the assignement problem which occurs when students have to choose a study project. You'll discover the mathematical modelisation of the problem and how it can be used to find the best solution to an assignement problem. You'll also discover our intuitive tool based on Google Sheets to solve your frustating assignement problems.}
 
-\posterblock{Constat}{Plein de truc sont à améliorer dans ce projet}{images/modeemploi}{}
-\posterblock{Solution}{Il y en a plein :
-\begin{itemize}
-    \item la première
-    \item la deuxième
-\end{itemize}
-}{images/fig1}{}
 
-\posterblock{Conclusion}{Tout marche nickel}{images/fig2}{Ma légende}
+\posterblock{Objectifs}{
+Créer un outil permettant d'aider à la décision lors des intenses débats provoqués par les affectations de projets étudiants.
+
+\textbf{But : simplifier la phase d'affectation et satisfaire tout le monde avec le projet qui lui a été attribué !}
+}{images/Graphe_bipartie}{3 étudiants pour 3 projets : Qui fait quoi ?}
+
+\posterblock{Mise en \oe{}uvre}{
+Modélisation du problème d'affectation par un problème d'optimisation linéaire en nombre entier résolu à l'aide du \textbf{solver linéaire GLPK}.
+Saisie dans un tableur \textbf{Google Sheet} lié au solver GLPK via des scripts Javascript pour résoudre les affectations !
+}{images/architecture_appli}{Architecture de l'outil}
+
+\posterblock{Résultats obtenus}{
+Système complet avec un \textit{modèle mathématique} implémenté en \textbf{GMPL} (pour \textit{GLPK}) implanté dans une API en ligne pour faire appel au solver de manière abstraite. Et une interface de saisie simple.
+
+\textbf{Testé et approuvé par les étudiants de DII3 pour les affectations de projets électroniques !}
+}{images/interface_appli_globale}{Interface de saisie Google Sheet}
+
+
 
 %\addbibresource{biblio}
-
-
 
 \begin{document}
 % zone du contenu du document
 
 %=========BEGIN chap 0=============
-\chapter*{Introduction}
-\label{chap:intro}
+\chapter*{Introduction\label{chap:intro}}
+
 
 Tous les ans, dans toutes les promotions d'étudiants ingénieurs de Polytech Tours, d'intenses débats ont lieu au moment des affectations de projets. En effet, chacun souhaite avoir le projet qui lui plaît le plus. Pour aider à dénouer ces débats, nous avons proposé de travailler sur un outil d'aide à l'affectation des projets étudiants. 
 
@@ -61,19 +80,19 @@ Nous aborderons alors comment nous avons modélisé ce problème puis avec quels
 Pendant la lecture de ce rapport de projet, nous vous exposerons une méthode de résolution du problème d'affectation.
 
 %=========BEGIN chap 1=============
-\chapter{Le problème d'affectation}
-\label{chap:pb_affectation}
+\chapter{Le problème d'affectation\label{chap:pb_affectation}}
 
-\section{Présentation}
-\label{sec:pres_affectation}
+
+\section{Présentation\label{sec:pres_affectation}}
+
 
 Ce travail est un problème d'affectation.
 En effet, le but est d'associer à un ou plusieurs individus un projet précis en respectant un objectif simple: maximiser la satisfaction générale de l'affectation.
 L'idée et que chacun soit satisfait du projet auquel il a été affecté et qu'il soit en mesure de le mener à bien dans les meilleures conditions.
 
 
-\section{La modélisation mathématique}
-\label{sec:mod_math}
+\section{La modélisation mathématique\label{sec:mod_math}}
+
 
 Pour résoudre ce problème, nous allons avoir besoin de la formaliser de manière mathématique afin d'essayer de trouver des solutions.
 Nous rappelons que le but est d'affecter un étudiant, un binôme ou un groupe de personnes à un projet.
@@ -84,8 +103,8 @@ Pour cela, il faut définir quels sont les \textbf{paramètres}\footnote{Dans un
 
 Commençons par définir nos données c'est à dire les paramètres de notre modèle.
 
-\subsection{Les données et les paramètres}
-\label{sec:donnees_params}
+\subsection{Les données et les paramètres\label{sec:donnees_params}}
+
 Pour cela on commence par créer deux entités appartenant à deux ensembles qui seront nos données de départ:
 \begin{enumerate}
 \item une entité $individu \in Individus$ : représente une personne, un binôme ou un groupe de personnes qui accomplira un \textbf{projet};
@@ -574,20 +593,96 @@ Elle dispose d'un tableau permettant à chaque élève/binôme ou groupe de pouv
 
 Nous avons cherché a produire une interface simple et minimaliste.
 
-L’utilisateur pourra également configurer les paramètres d'affectation affichés en vert (Cf. \autoref{fig:interface_parametres}):
+L'utilisateur pourra également configurer les paramètres d'affectation affichés en vert (Cf. \autoref{fig:interface_parametres}):
 \begin{enumerate}
 \item Nombre max d’étudiant par projets
 \item Nombre de projets par étudiants
 \end{enumerate}
 
-\begin{figure}
-\includegraphics[width=12cm]{images/interface_parametres}
+\begin{figure}[htbp]
+\includegraphics[width=9cm]{images/interface_parametres}
 \caption{\label{fig:interface_parametres} Saisies des paramètres d'affectation}
 \end{figure}
 
+Pour finir, l’interface comporte un bouton “Affecter” pouvant lancer le calcul de l’affectation des élèves aux projets proposés (Cf. \autoref{fig:interface_bp_affecter}). 
 
+\begin{figure}[htbp]
+\includegraphics[width=4cm]{images/interface_bp_affecter}
+\caption{\label{fig:interface_bp_affecter} Bouton affecter}
+\end{figure}
+
+À l'évènement du clic sur le bouton, une fonction interne à Google sheets est exécuté en arrière plan qui permet de récupérer les valeurs des paramètres et le contenu tableau pour envoyer une requêtes à l’API avec ces paramètres.
+Dès lors, l'API prends le relais et s'occupe de mettre en forme les données pour l'appel de GLPK et retourner les résultats d'affectation.
+
+Dès la réponse intercepté, celle-ci est traité en affichant les affectations en vert sur le Google Sheets (Cf. \autoref{fig:interface_preference} pour une illustration du résultat). 
+
+Cette interface a permis à elle seule de résoudre le problème. Nous aurions pu nous arrêter à ce niveau car l'ensemble des objectifs du projet sont à ce stade accomplis.
+
+
+\paragraph{Anecdote}
+\label{anec:affect_proj_elec}
+Nous avions tout juste réussi à mettre en place cette version de l'outil d'affectation juste avant \textbf{les affectations de projets électroniques de DII3A}. Ceci a été l'occasion de mettre à l'épreuve notre modèle avec un réel jeu de donné. 
+Ainsi tous les élèves de DII3 ont voté pour les projets électronique de leurs choix de manière collaborative en se connectant tous sur le Google Drive. 
+
+Nous avons ensuite lancé l'affectation via notre outil et le résultat a satisfait tout le monde ! Ce fut un franc succès ! 
+
+Cependant, nous ne nous sommes pas arrêté à ce niveau mais nous avons mis en place un ensemble d'améliorations au programme.
 
 \subsection{Les améliorations}
+
+Après l'objectif principal réalisé. Nous nous sommes penché sur les améliorations nécessaires et utiles :
+
+\paragraph{Amélioration de la fiabilité:}
+Google Sheets est actuellement dépendant de l’API pour fonctionner. De plus, l’API à besoin d'être hébergé (coûts) et peut s'arrêter à tout moment (ex: crash du serveur) ce qui rendrait l'application inutilisable. Pour remédier à cette dépendance, nous avons réussi à inclure la librairie javascript de GLPK dans Google Script et à l'utiliser. Par la suite, nous avons également réussi à importer le modèle mathématique.
+Ces étapes nous ont permis de rendre l'application indépendante de l’API. Ceci rends la duplication de notre application très facile et elle n'est dépendante que des services Google connus pour être redoutablement fiable.
+
+\paragraph{Une interface plus intuitive}
+Les étudiants n'ont pas le droit d'appliquer le même voeux sur plusieurs projet différent. (ex : voeux \no 1 sur le projet 1 et voeux \no 1 sur le projet 2).
+
+Afin que les problèmes soient visibles et rectifiés rapidement avant le début des affectations, nous avons mis en place une règle de mise en forme conditionnelle qui a pour but d'afficher en rouge les voeux qui ont la même préférence.
+
+Par la suite, nous avons mis en place l'affichage d'une boîte de dialogue permettant de notifier l'utilisateur de la résolution en cours.
+
+ Il est affiché\textit{ “Initialisation du modèle ..."} : il s'agit de la récupération des données du tableau et la mise en forme de ces données afin qu'elles puissent être traité dans le modèle mathématique.
+ 
+Par la suite, il y a \textit{“Résolution en cours…”} : cela signifie que les données sont en train d'être traité par la librairie GLPK.
+
+Pour finir, une boîte de dialogue affichera que la résolution a réussi avec le temps de la résolution, soit l'utilisateur sera informé d'une erreur (données incorrects, erreur 404/500...). Le temps de la résolution sera inscrit dans une feuille nommé \textit{“Perf”} afin de pouvoir visualiser les différentes performance.
+
+\paragraph{Une protection du code}
+Le code était accessible par tout le monde. Afin d'éviter des modifications conséquente ou voir une perte du fichier, nous avons mis à disposition le fichier original de base en mode \textit{“Lecture seule”} et pouvant donc être copié pour être modifié. 
+
+Puis dans un second temps, nous avons créé un API Google Script avec le code principal. Cette API peut être accessible par le public. Autant dire qu'on peut totalement se passer d'héberger l'API sur un serveur VPS puisque le service Google le fait.
+
+\paragraph{Une configuration plus poussée}
+On donne la possibilité à l'utilisateur de choisir de résoudre le problème avec ou sans l’API Node (l’API Node à l'avantage de résoudre le problème plus rapidement). Et il peut également choisir d'afficher les Logs dans une feuille nommé \textit{“Log”}.
+
+\paragraph{L'ajout d'une option pour définir les projets prioritaires}
+Cette option permettra à l'utilisateur de définir les projets qui seront obligatoirement pris. Il suffira d'inscrire dans la case juste au dessus du projet : \textit{“oui”}. 
+Nous avons rajouté cette contrainte car il est possible que plus de projets que d'étudiants soient proposés. Parmis cette liste de projets, certains peuvent être obligatoires, ce fut notamment le cas pour notre cas pratique (Cf. paragraphe \autoref{anec:affect_proj_elec}).
+Cette option supplémentaire s'est traduit par une nouvelle contrainte dans le modèle mathématique. Pour ça on a besoin d'un nouveau paramètre qui est le \textbf{\textit{projetObligatoire}} (Cf. \autoref{eqn:projet_oblig_def}).
+
+\begin{equation}
+\forall {p \in Projets}, projetObligatoire[p]=
+\left\lbrace
+\begin{array}{c c }
+1 & \text{ si le projet est obligatoire} \\
+0 & \text{ sinon}
+\end{array}
+\right.
+\label{eqn:projet_oblig_def}
+\end{equation}
+
+\begin{equation}
+\forall {p \in Projets}, projetObligatoire[p]\times\sum_{e \in Etudiants} affectation[e,p] >=projetObligatoire[p]
+\label{eqn:proj_obligatoires}
+\end{equation}
+
+
+L'\autoref{eqn:proj_obligatoires} est la nouvelle contrainte résultante de l'ajout des projets obligatoires. Cette contrainte stipule qu'il faut \textbf{au moins} un étudiant affecté sur le projet s'il est obligatoire.
+
+\paragraph{L'affichage des performances}
+Afin de connaître les performances de l'application, nous avons affichons sur une feuille \textit{“Perf”}, la vitesse de résolution en fonction de 2 paramètres : affichages de logs et utilisation de l’API Node ou non.
 
 
 %\section{Saisie et visualisation}
@@ -598,4 +693,14 @@ L’utilisateur pourra également configurer les paramètres d'affectation affic
 
 %=========END chap 2================
 
+%============BEGIN Conclusion
+\chapter*{Conclusion}
+
+%============END Conclusion
+
+
+\chapter*{Annexes}
+
+%TODO ajouter code source GLPK
+%TODO Ajouter code source JS
 \end{document}
