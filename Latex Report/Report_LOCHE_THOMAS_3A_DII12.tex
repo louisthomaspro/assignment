@@ -69,15 +69,20 @@ Système complet avec un \textit{modèle mathématique} implémenté en \textbf{
 \chapter*{Introduction\label{chap:intro}}
 
 
-Tous les ans, dans toutes les promotions d'étudiants ingénieurs de Polytech Tours, d'intenses débats ont lieu au moment des affectations de projets. En effet, chacun souhaite avoir le projet qui lui plaît le plus. Pour aider à dénouer ces débats, nous avons proposé de travailler sur un outil d'aide à l'affectation des projets étudiants. 
+Tous les ans, 	apparaissent dans les promotions d'étudiants ingénieurs de Polytech Tours, d'intenses débats au moment des affectations de projets. 
+En effet, chacun souhaite avoir le projet qui lui plaît le plus. Pour aider à dénouer ces débats, nous avons proposé de travailler sur un outil d'aide à l'affectation des projets étudiants. 
 
-A travers ce projet, nous verrons comment nous avons choisi de résoudre problème d'affectation afin que chacun soit satisfait de son affectation.
+Quel dispositifs peuvent être mis en place pour aider à dénouer ces problèmes ?
 
-Vous découvrirez comment nous avons réparti notre charge de travail dans ce développement.
+%A travers ce projet, nous verrons comment nous avons choisi de résoudre ce problème d'affectation afin que chacun soit satisfait de son affectation.
 
-Nous aborderons alors comment nous avons modélisé ce problème puis avec quels outils nous avons travaillé pour arriver à un outils de saisie et de résolution des affectations.
+%Vous découvrirez comment nous avons réparti notre charge de travail dans ce développement.
 
-Pendant la lecture de ce rapport de projet, nous vous exposerons une méthode de résolution du problème d'affectation.
+Vous découvrirez dans un premier temps comment nous avons modélisé ce problème à travers l'optimisation linéaire. L'idée qui sera développée ici est comment utiliser les votes des étudiants pour leurs projet préféré pour trouver l'affectation qui conviendra à tout le monde.
+
+Dans un second temps, nous vous présenterons comme se passe la phase d'optimisation à travers le solver GLPK. A ce stade on abordera les méthodes de résolution via l'algorithme Hongrois et par l'intermèdiaire d'un solver linéaire.
+
+Nous terminerons par l'outil de saisie en ligne basé sur Google sheet que nous avons mis en place pour assister les gérants.
 
 %=========BEGIN chap 1=============
 \chapter{Le problème d'affectation\label{chap:pb_affectation}}
@@ -696,11 +701,31 @@ Afin de connaître les performances de l'application, nous avons affichons sur u
 %============BEGIN Conclusion
 \chapter*{Conclusion}
 
+Ce projet nous a permis de décourvrir les mécanismes de la programmation linéaire en nombre entier pour résoudre des problèmes d'optimisation. 
+
+Grâce à ce travail, nous avons pu mettre en place un modèle mathématique adapté à notre problème d'affectation des projets étudiants. 
+
+Ce modèle ensuite implémenté en GMPL et résolu par le solver GLPK nous a permis de résoudre le problème avec un jeu de contraintes intéressantes.
+
+Sur ce modèle nous avons greffé une interface de saisie intuitive basé sur Google Sheet.
+
+Ce projet a été très satisfaisant pour nous car nous avons réussi à l'appliquer directement lors des affectations de projet électroniques de 3\ieme année en informatique industrielle.
+
+De nombreuses améliorations ont été apporté à notre applicatif notamment sa mise en disponibilité en ligne pour une utilisation transparente. 
+De plus, cette application est évolutive, aujourd'hui basée sur Google Sheet, elle pourra évoluer pour devenir une application PC où mobile native.
+
+Nous avons pu enrichir nos connaissances en recherche opérationnelle et en technologie web en produisant un outil fonctionnel permettant d'aiderà la résolution des affectations de projets.
+
+%TODO Piste d'amélioration ?
+
+
+
 %============END Conclusion
 
 
 \chapter*{Annexes}
 
-%TODO ajouter code source GLPK
+\javasourcefile{ressources/mathprog_model.txt}
+
 %TODO Ajouter code source JS
 \end{document}
