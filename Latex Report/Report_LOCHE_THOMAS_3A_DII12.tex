@@ -533,11 +533,16 @@ On peut ensuite appeler GLPK simplement via la commande:
 \textbf{glpsol -m \textit{[Mon\_Modèle]}.mod -d \textit{[Mes\_Données1]}.dat -d \textit{[Mes\_Données2]}.dat}
 \end{center}
 
-Vous trouverez en annexe  l'implémentation du modèle mathématique. TODO:RAJOUTER LE LIEN DU CODE GMPL assign.mod
-%TODO
+Vous trouverez en annexe  l'implémentation du modèle mathématique. Dans ce modèle, nous avons implémenté l'ensemble du jeu de contraintes défini dans le début de ce rapport ainsi que déclaré l'ensemble de paramètres et variables nécessaires à la résolution (Cf. \autoref{src:gmpl_source_model})
 
-GLPK est disponible en librairie portable à cette adresse TODO AJOUTER LE LIEN GLPK online
-%TODO
+GLPK est disponible en librairie portable à cette adresse \url{https://www.gnu.org/software/glpk/}.
+
+On peut exécuter notre modèle avec un jeu de données de tests intégrés via la commande :
+\begin{center}
+\textbf{glpsol -m \textit{Nom\_du\_Fichier}.mod}
+\end{center}
+
+Désormais, nous allons traiter le problème de la saisie des données et comment nous avons choisi de construire notre interface pour utiliser le modèle.
 
 \section{Interface de saisie des données et création d'un back-end}
 Dans cette partie du rapport, nous allons voir notre proposition en terme d'interface de saisie des préférences accompagnant notre modèle de résolution.
@@ -725,6 +730,8 @@ Nous avons pu enrichir nos connaissances en recherche opérationnelle et en tech
 
 \chapter*{Annexes}
 
+\section{Code GMPL pour le modèle mathématique d'affectation}
+\label{src:gmpl_source_model}
 \javasourcefile{ressources/mathprog_model.txt}
 
 %TODO Ajouter code source JS
