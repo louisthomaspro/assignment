@@ -1,5 +1,8 @@
-Google Sheets : https://docs.google.com/spreadsheets/d/1rWP0vYSkZZXvwsgBZ9kpxMpFV3KRidZziTDCTRJ5XdM/edit?usp=sharing<br>
-ID de l'API : MaZzw3Rd7wPS_A1gxtCV7rDIA2gQQzN3M
+# How to use project ?
+>
+1. Add the google sheet template project to your drive : https://docs.google.com/spreadsheets/d/1rWP0vYSkZZXvwsgBZ9kpxMpFV3KRidZziTDCTRJ5XdM/edit?usp=sharing
+2. Create your own copy, rename the file and open it.
+3. Go to ***Tools  Script editor***, copy code below in the script and save your google script.
 
 ```javascript
 function click() {
@@ -23,3 +26,8 @@ function clearArray() {
   sheet.getRange(arraypos['i'], arraypos['j'], 100,100).setBackground(null); // Clear background color
 }
 ```
+
+4. Go to ***Resources > Libraries***, add the library with ID : ***MaZzw3Rd7wPS_A1gxtCV7rDIA2gQQzN3M*** and set the last version of it.
+5. Save, go back to the google sheet and click on the button ***Affecter*** to test if it's working.
+
+Now you can change the google sheets datas to fit your needs ;)
