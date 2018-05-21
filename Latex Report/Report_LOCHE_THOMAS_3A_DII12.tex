@@ -638,6 +638,7 @@ Nous avons ensuite lancé l'affectation via notre outil et le résultat a satisf
 
 Cependant, nous ne nous sommes pas arrêté à ce niveau mais nous avons mis en place un ensemble d'améliorations au programme.
 
+
 \subsection{Les améliorations}
 
 Après l'objectif principal réalisé. Nous nous sommes penché sur les améliorations nécessaires et utiles :
@@ -695,6 +696,11 @@ L'\autoref{eqn:proj_obligatoires} est la nouvelle contrainte résultante de l'aj
 Afin de connaître les performances de l'application, nous avons affichons sur une feuille \textit{“Perf”}, la vitesse de résolution en fonction de 2 paramètres : affichages de logs et utilisation de l’API Node ou non.
 
 
+\paragraph{Notice d'installation et d'utilisation de l'application d'affectation Google Sheets}
+Vous trouverez en annexes \autoref{src:notice_utilisation} une notice de mise en place de l'application google sheet et les instructions d'utilisations.
+
+
+
 %\section{Saisie et visualisation}
 %TODO Comment programme google sheet, les outils utilisés pour tester, POSTMAN, node, serveur ovh...
 %\section{Organisation Front et Back end}
@@ -733,6 +739,61 @@ Nous avons pu enrichir nos connaissances en recherche opérationnelle et en tech
 \section{Code GMPL pour le modèle mathématique d'affectation}
 \label{src:gmpl_source_model}
 \javasourcefile{ressources/mathprog_model.txt}
+
+
+\section{Notice d'installation et d'utilisation de l'outils google sheet}
+\label{src:notice_utilisation}
+
+Rendez-vous sur \url{https://github.com/louisthomaspro/assignment} pour récupérer le lien du template (\autoref{fig:notice_1}).
+\begin{figure}[htbp]
+\includegraphics[width=13cm]{images/notice/notice_1}
+\caption{\label{fig:notice_1}\'Etape 1 Notice}
+\end{figure}
+
+Ouvrez le spreadsheet et ajoutez le à votre dossier Drive via \textbf{Fichier} $\leftarrow$ \textbf{Ajouter à mon Drive} (\autoref{fig:notice_2}).
+\begin{figure}[htbp]
+\includegraphics[width=13cm]{images/notice/notice_2}
+\caption{\label{fig:notice_2}\'Etape 2 Notice}
+\end{figure}
+
+Créez une copie et renommer le fichier spreadsheet (\autoref{fig:notice_3}).
+\begin{figure}[htbp]
+\includegraphics[width=13cm]{images/notice/notice_3}
+\caption{\label{fig:notice_3}\'Etape 3 Notice}
+\end{figure}
+
+Ouvrir le fichier, cliquer sur affecter pour tester et accepter les autorisations pour permettre au script de s'éxécuter (\autoref{fig:notice_4}).
+\begin{figure}[htbp]
+\includegraphics[width=13cm]{images/notice/notice_4}
+\caption{\label{fig:notice_4}\'Etape 4 Notice}
+\end{figure}
+
+Partager le liens (\textbf{modifiable}) aux étudiants concernés (\autoref{fig:notice_5}).
+\begin{figure}[htbp]
+\includegraphics[width=13cm]{images/notice/notice_5}
+\caption{\label{fig:notice_5}\'Etape 5 Notice}
+\end{figure}
+
+Les étudiants remplissent leurs voeux en autonomie (\autoref{fig:notice_6}).
+\begin{figure}[htbp]
+\includegraphics[width=13cm]{images/notice/notice_6}
+\caption{\label{fig:notice_6}\'Etape 6 Notice}
+\end{figure}
+
+Cliquer sur \textbf{Affecter} une fois les voeux renseignés (\autoref{fig:notice_7}).
+\begin{figure}[htbp]
+\includegraphics[width=13cm]{images/notice/notice_7}
+\caption{\label{fig:notice_7}\'Etape 7 Notice}
+\end{figure}
+
+Affectations terminées ! (\autoref{fig:notice_8})
+\begin{figure}[htbp]
+\includegraphics[width=12cm]{images/notice/notice_8}
+\caption{\label{fig:notice_8}\'Etape 8 Notice}
+\end{figure}
+
+
+
 
 %TODO Ajouter code source JS
 \end{document}
