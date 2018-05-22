@@ -90,9 +90,9 @@ Quel dispositifs peuvent être mis en place pour aider à dénouer ces problème
 
 Vous découvrirez dans un premier temps comment nous avons modélisé ce problème à travers l'optimisation linéaire. L'idée qui sera développée ici est comment utiliser les votes des étudiants pour leurs projet préféré pour trouver l'affectation qui conviendra à tout le monde.
 
-Dans un second temps, nous vous présenterons comme se passe la phase d'optimisation à travers le solver GLPK. A ce stade on abordera les méthodes de résolution via l'algorithme Hongrois et par l'intermèdiaire d'un solver linéaire.
+Dans un second temps, nous vous présenterons comme se passe la phase d'optimisation à travers le solver GLPK. \`A ce stade on abordera les méthodes de résolution via l'algorithme Hongrois et par l'intermèdiaire d'un solver linéaire.
 
-Nous terminerons par l'outil de saisie en ligne basé sur Google sheet que nous avons mis en place pour assister les gérants.
+Nous terminerons par l'outil de saisie en ligne basé sur Google sheet que nous avons mis en place pour assister les gérants de promotion responsables des projets.
 
 %=========BEGIN chap 1=============
 \chapter{Le problème d'affectation\label{chap:pb_affectation}}
@@ -109,7 +109,7 @@ L'idée et que chacun soit satisfait du projet auquel il a été affecté et qu'
 \section{La modélisation mathématique\label{sec:mod_math}}
 
 
-Pour résoudre ce problème, nous allons avoir besoin de la formaliser de manière mathématique afin d'essayer de trouver des solutions.
+Pour résoudre ce problème, nous allons avoir besoin de le formaliser de manière mathématique afin d'essayer de trouver des solutions.
 Nous rappelons que le but est d'affecter un étudiant, un binôme ou un groupe de personnes à un projet.
 
 Le fait de formaliser un problème en langage mathématique nous permettra de demander à un \textbf{solver} de trouver la solution à notre problème.
@@ -149,7 +149,7 @@ Pour plus de simplicité, on va indicer les entités comme dans \autoref{tab:ind
 Pour que l'affectation de chaque individu à un projet, il faut assez de projet pour tout le monde ce qui implique la relation suivante:
 $$ nbProjets \geqslant nbIndividus$$
 
-Pour tout les individus, on souhaite connaître sa préférence pour un projet afin de procéder à l'affectation. En utilisant le formalisme mathématique, on peut définir la quantité $preference$ qui définira l'appréciation d'un individu à un projet donné:
+Pour tous les individus, on souhaite connaître sa préférence pour un projet afin de procéder à l'affectation. En utilisant le formalisme mathématique, on peut définir la quantité $preference$ qui définira l'appréciation d'un individu à un projet donné:
 $$
 \forall (i,p) \in Individus \times Projets,
 preference[i,p] \in \llbracket 1, nbProjets \rrbracket
@@ -177,7 +177,7 @@ Nous allons devoir mettre en place des \textbf{ variables} et des \textbf{contra
 
 Une \textbf{variable} est une valeur qui doit être déterminée pour résoudre le problème. Il faut donc la calculer.
 
-Nous cherchons à déterminer a quel projet est affecté un individu. Pour cela on crée la variable $affectation$:
+Nous cherchons à déterminer à quel projet est affecté un individu. Pour cela on crée la variable $affectation$:
 $$
 \forall (i,p) \in Individu\times Projets , affectation[i,p]=
 \left\lbrace
@@ -216,20 +216,20 @@ On appelle cet indicateur la \textbf{fonction objectif}.
 Trouver la solution à un problème mathématique se résume souvent à établir la bonne fonction objectif qu'on souhaite faire converger vers une valeur donner, maximiser ou minimiser.
 
 
-Dans notre cas, on souhaite maximiser la satisfaction générale, c'est à dire maximiser la somme des préférence des projets affectés à chacun. Ainsi le résultat optimal sera atteint lorsqu'on aura réussi a trouver la combinaison de variable qui donne la plus grande valeur de la \textbf{fonction objectif}.
+Dans notre cas, on souhaite maximiser la satisfaction générale, c'est à dire maximiser la somme des préférences des projets affectés à chacun. Ainsi le résultat optimal sera atteint lorsqu'on aura réussi à trouver la combinaison de variable qui donne la plus grande valeur de la \textbf{fonction objectif}.
 
 \begin{equation}
 \label{eqn:maximize_preference}
 \text{maximiser} \left( \sum_{(i \in Individus)} \sum_{(p\in Projets)} affectation[i,p]\times preference[i,p] \right)
 \end{equation}
 
-Pour le problème d'affectation maximiser la fonction objectif \eqref{eqn:maximize_preference} donnera la satisfaction générale la plus élevée car elle correspondra à faire en sorte que si un individu est affecté à un projet, la valeur de la préférence sera en moyenne la plus grande.
+Pour le problème d'affectation, maximiser la fonction objectif \eqref{eqn:maximize_preference} donnera la satisfaction générale la plus élevée car elle correspondra à faire en sorte que si un individu est affecté à un projet, la valeur de la préférence sera en moyenne la plus grande.
 
-Cette méthode fonctionne est efficace pour trouver la meilleur préférence moyenne, cependant, elle peut être injuste et sélectionner pour la majorité des individu la préférence maximale et pour un individu la pire des préférence.
+Cette méthode fonctionne est efficace pour trouver la meilleur préférence moyenne, cependant, elle peut être injuste et sélectionner pour la majorité des individu la préférence maximale et pour un individu la pire des préférences.
 
 Il peut donc apparaître un sentiment d'injustice derrière cette affectation avec la sensation que quelqu'un à été mis de coté pour satisfaire le bien commun.
 
-A cela, nous proposons un solution de compromis qui fourni une solution plus homogène (si elle existe évidemment).
+\`A cela, nous proposons un solution de compromis qui fourni une solution plus homogène (si elle existe évidemment).
 
 \subsection{Objectif de compromis, la contrainte de la préférence minimale}
 \label{sec:pref_min}
@@ -248,7 +248,7 @@ $$
 \forall i \in Individus ,preferenceMinimale = \sum_{p \in Projets} affectation[i,p]\times preference[i,p] \geqslant ValeurPrefMin
 $$
 
-\paragraph{Problème} Cette contrainte est très restrictive sur les solutions. Il se peut même $ValeurPrefMin$ de manière trop audacieuse et que le problème soit insoluble avec ces paramètres.
+\paragraph{Problème} Cette contrainte est très restrictive sur les solutions. Il se peut même, qu'en choisissant $ValeurPrefMin$ de manière trop audacieuse, le problème soit insoluble avec ces paramètres.
 Prenons un exemple de l'affectation de 4 individus et 4 projets (Cf. \autoref{tab:preference_exemple}).
 
 \begin{table}
@@ -268,20 +268,20 @@ Individu 4 & 2 & 4 & 1 & 3 \\
 \end{tabular}
 \end{table}
 
-Si on choisi $ValeurPrefMin=3$, alors le modèle mathématique est insoluble car la contrainte $preferenceMinimale$ ne pourras pas être respectée pour tout les individus. On a 4 projets pour 4 individus, on remarque qu'il faudra donc exactement 1 projet par individu pour respecter la contrainte $nbProjetsParIndividu=1$. Le problème est que si un individu est affecté au projet P3, alors la valeur de la préférence est inférieure ou égale à 2 donc inférieure à $ValeurPrefMin=3$. On ne respecte alors pas la contrainte $preferenceMinimale$ pour un des individu donc le modèle est insoluble.
-Pour trouver une solution il faudra revoir le paramètre $ValeurPrefMin$ à la baisse. Pour la valeur 2, on commencera a trouver des solutions pour laquelle la $ValeurPrefMin$ est maximale. Donc les bonnes solutions de compromis.
+Si on choisit $ValeurPrefMin=3$, alors le modèle mathématique est insoluble car la contrainte $preferenceMinimale$ ne pourras pas être respectée pour tous les individus. On a 4 projets pour 4 individus, on remarque qu'il faudra donc exactement 1 projet par individu pour respecter la contrainte $nbProjetsParIndividu=1$. Le problème est que si un individu est affecté au projet P3, alors la valeur de la préférence est inférieure ou égale à 2 donc inférieure à $ValeurPrefMin=3$. On ne respecte alors pas la contrainte $preferenceMinimale$ pour un des individus donc le modèle est insoluble.
+Pour trouver une solution il faudra revoir le paramètre $ValeurPrefMin$ à la baisse. Pour la valeur 2, on commencera à trouver des solutions pour laquelle la $ValeurPrefMin$ est maximale. Ce sont les solutions de compromis.
 
 Il y a plusieurs solutions pour automatiser la détermination de la valeur de $ValeurPrefMin$ pour laquelle on assure que tout le monde aura la meilleur préférence possible tout en maximisant la satisfaction générale.
 
 \paragraph{Solution 1}
-Le but est d'essayer de trouver la valeur maximale de $ValeurPrefMin$ pour laquelle on arrive a résoudre le modèle. Pour cela, on peut rechercher la valeur maximale en faisant plusieurs résolutions du modèle mathématique en fixant différentes valeurs de $ValeurPrefMin$. On peut faire une recherche par tentative ou dichotomique. $ValeurPrefMin$ n'intervient pas dans la fonction objectif à ce stade.
+Le but est d'essayer de trouver la valeur maximale de $ValeurPrefMin$ pour laquelle on arrive à résoudre le modèle. Pour cela, on peut rechercher la valeur maximale en faisant plusieurs résolutions du modèle mathématique en fixant différentes valeurs de $ValeurPrefMin$. On peut faire une recherche par tentative ou dichotomique. $ValeurPrefMin$ n'intervient pas dans la fonction objectif à ce stade.
 
 \subparagraph{Recherche de $ValeurPrefMin$ par tentative}
 
 La fonction $SolveModel(\text{param:} ValeurPrefMin)$ est un sous-algorithme appelé par notre algorithme pour effectuer la résolution du modèle mathématique avec la valeur de préférence minimale passée en paramètre.
 Elle renvoie une structure $ResultSolver$ contenant les résultats de la résolution $ResultSolver.data$ et l'état de la résolution $ResultSolver.state$ qui peut valoir soit $Success$ si une solution au modèle a été trouvée et $Fail$ sinon.
 
-On l'utilise donc pour savoir si on a réussi a résoudre le
+On l'utilise donc pour savoir si on a réussi a résoudre le modèle.
 \begin{algorithm}
 \caption{\label{chap:problem_affectation:algo:recherche_tatonnement}Résolution du modèle avec $ValeurPrefMin$ choisi par tentative}
 
@@ -313,6 +313,11 @@ $ResultSolver \gets Null$ \\
 Cette méthode n'a pas la meilleur complexité et peut considérablement allonger les temps de résolution du modèle. C'est pour cela que nous proposons la méthode dichotomique.
 
 \subparagraph{Recherche de $ValeurPrefMin$ dichotomique}
+
+On procède de la même façon en faisant appel au solver via des appels consécutifs choisi de manière dichotomique comme dans l'algorithme \autoref{chap:problem_affectation:algo:recherche_dichotomique}.
+Cette méthode va économiser des appels au solver. 
+La recherche dichotomique a une compléxité moindre qu'une recherche directe.
+
 \begin{algorithm}
 \tcc{Init variable résultat du solver, contient $ResultSolver.data$ et $ResultSolver.state$}
 $ResultSolverFinal \gets Null$ \\
@@ -338,6 +343,8 @@ $mil \gets \frac{deb+fin}{2}$ \\
 \Return{$ResultSolverFinal$}
 \caption{\label{chap:problem_affectation:algo:recherche_dichotomique}Recherche de $ValeurPrefMin$ dichotomique}
 \end{algorithm}
+
+
 \paragraph{Solution 2}
 On change la nature de $ValeurPrefMin$ et elle devient donc une \textbf{variable} intervenant dans la fonction objectif.
 L'idée derrière cette modification est de demander, en plus de la maximisation de la préférence moyenne, une maximisation de la $ValeurPrefMin$.
@@ -350,7 +357,7 @@ On peut rajouter $ValeurPrefMin$ dans la fonction objectif en faisant une simple
 \text{maximiser} \left( ValeurPrefMin + \sum_{(i \in Individus)} \sum_{(p\in Projets)} affectation[i,p]\times preference[i,p] \right)
 \end{equation}
 
-Cette agrégation permettra donc de chercher aussi a maximiser la $ValeurPrefMin$. Cependant, elle ne le sera pas au même titre que la satisfaction moyenne car il peut être plus avantageux de chercher à maximiser d'avantage la satisfaction que la $ValeurPrefMin$.
+gCette agrégation permettra donc de chercher aussi à maximiser la $ValeurPrefMin$. Cependant, elle ne le sera pas au même titre que la satisfaction moyenne car il peut être plus avantageux de chercher à maximiser d'avantage la satisfaction que la $ValeurPrefMin$.
 
 \subparagraph{Méthode de combinaison linéaire des variables}
 Pour cela, on peut ajouter des poids $\alpha, \beta$ deux nombres donnés qui peuvent servir à donner plus d'importance à la $ValeurPrefMin$ ou à la satisfaction générale (Cf. \eqref{eqn:max_obj_combi_lineaire}).
@@ -421,10 +428,10 @@ Nous l'avons toutefois testé lors du démarrage du projet en déroulant l'algor
 
 Nous nous sommes rapidement tourné vers l'optimisation par programmation linéaire plus flexible en termes de contraintes pour la résolution des problèmes et pour laquelle il existe de très puissants algorithmes implémentés dans des logiciels optimisés.
 
-En effet, si résoudre le problème d'affectation comme le fait la méthode hongroise revient à résoudre le problème linéaire que nous avons définit au \autoref{chap:pb_affectation}.
+En effet, résoudre le problème d'affectation comme le fait la méthode hongroise revient à résoudre le problème linéaire que nous avons définit au \autoref{chap:pb_affectation}.
 
 La seule différence est que seules les contraintes \autoref{eqn:nb_indiv_proj} et \autoref{eqn:nb_proj_indiv} sur le nombre de projets par étudiants et le nombre d'étudiants par projet est fixé à $1$ pour que la méthode hongroise soit applicable.
-De même la fonction objectif de ce problème sera forcément \autoref{eqn:maximize_preference}. La compléxité de cet algorithme est comprise entre \textbf{O($n^3$)} et  \textbf{O($n^4$)}, c'est à dire qu'elle s'exécute en un temps proportionnel au polynôme $n^3$ ou $n^4$ avec $n$ la dimension de la matrice \textit{affectation} à déterminer.
+De même la fonction objectif de ce problème sera forcément \autoref{eqn:maximize_preference}. La compléxité de cet algorithme est comprise entre \textbf{O($n^3$)} et  \textbf{O($n^4$)}, c'est à dire qu'elle s'exécute en un temps proportionnel au polynôme $n^3$ ou $n^4$ avec $n$ la dimension de la matrice \textit{affectation} à déterminer. C'est un très bon niveau de performance pour la tâche à accomplir.
 
 Le besoin de changer de méthode résolution et la nécessité de passer à la programmation linéaire est apparu lorsque nous avons commencé a ajouter des contraintes à notre modèle.
 
@@ -526,7 +533,7 @@ Pour mettre en application notre modèle mathématique, nous avons choisi d'util
 
 En effet, nous avons précédemment formalisé le modèle du problème d'affectation et il ne reste plus qu'à le traduire en langage informatique pour qu'un solver trouve une solution optimisée qui respecte toutes les contraintes.
 
-Nous avons choisi GLPK car c'est un solver linéaire libre multi-plateforme qu'il est possible d'intégrer dans tout type d'applications à travers des librairies. L'avantage premier étant est qu'il est adapté à la résolution de notre problème linéaire.
+Nous avons choisi GLPK car c'est un solver linéaire libre multi-plateforme qu'il est possible d'intégrer dans tout type d'applications à travers des librairies. L'avantage premier étant qu'il est adapté à la résolution de notre problème linéaire.
 
 Lors de ce projet, nous n'avons pas fait le tour de toutes les méthodes d'optimisations utilisées par les solver, nous avons surtout cherché à comprendre comment utiliser le solver et le langage GMPL pour l'utiliser à la résolution de notre problème.
  
@@ -558,7 +565,7 @@ Désormais, nous allons traiter le problème de la saisie des données et commen
 Dans cette partie du rapport, nous allons voir notre proposition en terme d'interface de saisie des préférences accompagnant notre modèle de résolution.
 
 \subsection{Les choix et les objectifs}
-Nous avons fait une étude sur les différentes possibilité de saisie (Excel, Google sheets, Celene, interface JAVA, console...).
+Nous avons fait une étude sur les différentes possibilités de saisie (Excel, Google sheets, Celene, interface JAVA, console...).
 Après avoir pesé les pour et les contres, nous nous sommes tourné vers \textbf{Google sheets} : une application web (un tableur similaire au logiciel excel Microsoft) faisant partie de la suite de google.
 Une solution modulable permettant la saisie des voeux et des paramètres grâce à :
 \begin{enumerate}
@@ -576,15 +583,15 @@ Une solution modulable permettant la saisie des voeux et des paramètres grâce 
 Avec des compétences en javascript et en connaissant le domaine des APIs, nous avons fait le choix de faire communiquer Google Sheets (l’interface de saisie) avec un serveur NodeJS qui comporte le framework \textbf{Express} utilisé en temps qu’API (Interface de Programmation Applicative\footnote{Une API est un logiciel utilisé pour résoudre un problème donné où répondre à un service permettant aux dévéloppeurs de ne pas se soucier de son implémentation.}).
  Ceci nous a mené à une  infrastructure d’application simple, moderne et puissante chargée de traiter les données envoyées par Google sheets.
 L’avantage principal de l’API est le fait qu’elle peut être réutilisée pour d’autres projets. 
-Par exemple, si une application mobile est créé pour résoudre le problème d’affectation, celle-ci pourra communiquer avec l’API.
+Par exemple, si une application mobile est créée pour résoudre le problème d’affectation, celle-ci pourra communiquer avec l’API.
 En lui envoyant le bon format de donnée, celle-ci lui répondra avec les affectations. 
 
 En effet, Google Sheets a une interface de développement appelé “Google Script” permettant d’effectuer des algorithmes en javascript.
 C'est avec ce service que nous faisons appel à notre API.
 
-La contrainte est que Google sheets ne communique pas avec des API local. Nous avons donc procéder à l'hébergement de cette application sur un domaine réservé : “testing-app.ovh/assign” et un serveur vps (serveur privé virtuel\footnote{Un VPS est une des nombreuses machine virtuelle hébergé sur une machine hôte puissante permettant d'avoir plusieurs serveurs sur une machine physique.}).
+La contrainte est que Google sheets ne communique pas avec des API local. Nous avons donc procéder à l'hébergement de cette application sur un domaine réservé : \url{testing-app.ovh/assign} et un serveur vps (serveur privé virtuel\footnote{Un VPS est une des nombreuses machine virtuelle hébergé sur une machine hôte puissante permettant d'avoir plusieurs serveurs sur une machine physique.}).
 
-Cette api génère les données du modèle mathématique et les lie au \textbf{langage GMPL} (MathProg) en utilise une librairies intégrée GLPK pour le résoudre. 
+Cette api génère les données du modèle mathématique et les lie au \textbf{langage GMPL} (MathProg) et utilise une librairies intégrée GLPK pour le résoudre. 
 La réponse est renvoyée en JSON à Google Sheets qui lui, se charge de l’afficher.
 
 On peut résumer le fonctionnement global de notre logiciel à travers \autoref{fig:architecture_appli}.
@@ -703,7 +710,7 @@ Cette option supplémentaire s'est traduit par une nouvelle contrainte dans le m
 L'\autoref{eqn:proj_obligatoires} est la nouvelle contrainte résultante de l'ajout des projets obligatoires. Cette contrainte stipule qu'il faut \textbf{au moins} un étudiant affecté sur le projet s'il est obligatoire.
 
 \paragraph{L'affichage des performances}
-Afin de connaître les performances de l'application, nous avons affichons sur une feuille \textit{“Perf”}, la vitesse de résolution en fonction de 2 paramètres : affichages de logs et utilisation de l’API Node ou non.
+Afin de connaître les performances de l'application, nous affichons sur une feuille \textit{“Perf”}, la vitesse de résolution en fonction de 2 paramètres : affichages de logs ou non.
 
 
 \paragraph{Notice d'installation et d'utilisation de l'application d'affectation Google Sheets}
@@ -722,7 +729,7 @@ Vous trouverez en annexes \autoref{src:notice_utilisation} une notice de mise en
 %============BEGIN Conclusion
 \chapter*{Conclusion}
 
-Ce projet nous a permis de décourvrir les mécanismes de la programmation linéaire en nombre entier pour résoudre des problèmes d'optimisation. 
+Ce projet nous a permis de découvrir les mécanismes de la programmation linéaire en nombre entier pour résoudre des problèmes d'optimisation. 
 
 Grâce à ce travail, nous avons pu mettre en place un modèle mathématique adapté à notre problème d'affectation des projets étudiants. 
 
@@ -735,7 +742,7 @@ Ce projet a été très satisfaisant pour nous car nous avons réussi à l'appli
 De nombreuses améliorations ont été apporté à notre applicatif notamment sa mise en disponibilité en ligne pour une utilisation transparente. 
 De plus, cette application est évolutive, aujourd'hui basée sur Google Sheet, elle pourra évoluer pour devenir une application PC où mobile native.
 
-Nous avons pu enrichir nos connaissances en recherche opérationnelle et en technologie web en produisant un outil fonctionnel permettant d'aiderà la résolution des affectations de projets.
+Nous avons pu enrichir nos connaissances en recherche opérationnelle et en technologie web en produisant un outil fonctionnel permettant d'aider à la résolution des affectations de projets.
 
 %TODO Piste d'amélioration ?
 
@@ -760,7 +767,7 @@ Rendez-vous sur \url{https://github.com/louisthomaspro/assignment} pour récupé
 \caption{\label{fig:notice_1}\'Etape 1 Notice}
 \end{figure}
 
-Ouvrez le spreadsheet et ajoutez le à votre dossier Drive via \textbf{Fichier} $\leftarrow$ \textbf{Ajouter à mon Drive} (\autoref{fig:notice_2}).
+Ouvrez le spreadsheet et ajoutez le à votre dossier Drive via \textbf{Fichier} $\rightarrow$ \textbf{Ajouter à mon Drive} (\autoref{fig:notice_2}).
 \begin{figure}[htbp]
 \includegraphics[width=13cm]{images/notice/notice_2}
 \caption{\label{fig:notice_2}\'Etape 2 Notice}
